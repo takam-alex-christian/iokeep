@@ -1,6 +1,14 @@
+
+import {useContext} from "react"
+
+import { appDataContext } from "@/libs/contexts"
+
 import { Note as NoteIcon, Trash as TrashIcon, DocumentCopy, Additem as AdditemIcon, Add as AddIcon } from "iconsax-react"
 
 export default function CollectionNav() {
+
+    const {appDataState,appDataDispatch} = useContext(appDataContext)
+
     return (
         <div className="flex flex-col justify-between gap-8 col-span-1">
             {/* utility collections */}
@@ -11,9 +19,14 @@ export default function CollectionNav() {
                 <h3 className="p-4 text-lg font-bold text-dark">COLLECTIONS </h3>
 
                 <div className="flex flex-col gap-2">
-                    <CollectionButton label={"Business notes"} key="1" />
+                    {/* <CollectionButton label={"Business notes"} key="1" />
                     <CollectionButton label={"Daily planner notes"} key={2} />
-                    <CollectionButton label={"life lessons"} key={3} />
+                    <CollectionButton label={"life lessons"} key={3} /> */}
+                    
+                    {appDataState.collections.map((eachCollection, index)=>{
+                        return (<CollectionButton label={eachCollection} key={index} />)
+                    })}
+
                 </div>
                 {/* <hr className=" text-slate-100" />
 
@@ -36,7 +49,6 @@ export default function CollectionNav() {
                     <button className="w-fit bg-green-600 text-white rounded-2xl">
                         <div className="flex flex-row gap-4 p-4">
                             <AddIcon size={24} />
-
                             <span>Add Note</span>
                         </div>
 

@@ -11,11 +11,13 @@ export type NoteDataType = {
     lastModified: Date | string
 }
 
-export type AppDataContextType = {
+export type AppDataStateType = {
     collections: string[],
     currentCollection: string | null, 
     notes: NoteDataType[],
 }
+
+export type AppDataActionType = {type: "create_collection", payload: {collectionName: string}}
 
 export type AppUiStateType = {
     uiMode: "light" | "dark",

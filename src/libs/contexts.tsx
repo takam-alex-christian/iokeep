@@ -1,23 +1,30 @@
 
 
-import {createContext, Dispatch} from "react"
+import { createContext, Dispatch } from "react"
 
-import {AppDataContextType, AppUiStateType, AppUiActionType } from "./Types"
+import { AppDataStateType, AppUiStateType, AppDataActionType, AppUiActionType } from "./Types"
 
 
-const appDataContext = createContext<AppDataContextType>({
-    collections: [],
-    currentCollection: null,
-    notes: []
+const appDataContext = createContext<{
+    appDataState: AppDataStateType,
+    appDataDispatch: Dispatch<AppDataActionType>
+}>({
+    appDataState: {
+        collections: [],
+        currentCollection: null,
+        notes: []
+    },
+    appDataDispatch: () => { }
 })
+
 
 const appUiContext = createContext<{
     appUiState: AppUiStateType,
     appUiDispatch: Dispatch<AppUiActionType>
 }>({
-    appUiState: {uiMode: "light"},
-    appUiDispatch: ()=>{}
+    appUiState: { uiMode: "light" },
+    appUiDispatch: () => { }
 })
 
 
-export {appDataContext, appUiContext}
+export { appDataContext, appUiContext }
