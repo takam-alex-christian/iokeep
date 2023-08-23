@@ -2,14 +2,16 @@
 "use client"
 
 import { useState, useRef, useEffect, useContext } from "react";
-import { appDataContext } from "@/libs/contexts";
+import { appDataContext, appUiContext } from "@/libs/contexts";
 
 import { ArrowDown2 as ArrowDownIcon } from "iconsax-react";
+import { NoteDataType } from "@/libs/Types";
 
 
 export default function AddNote() {
 
-    const { appDataState } = useContext(appDataContext);
+    const { appDataState, appDataDispatch } = useContext(appDataContext);
+    const {appUiState, appUiDispatch} = useContext(appUiContext);
 
     const formRef = useRef<HTMLFormElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -18,6 +20,7 @@ export default function AddNote() {
     const [formState, setFormState] = useState({
         titleValue: "",
         bodyValue: "",
+
         focusWithin: false,
         selectedCollectionName: appDataState.currentCollection,
         showCollectionSelectOptions: false
@@ -58,37 +61,44 @@ export default function AddNote() {
 
         e.preventDefault();
 
+        
+        appDataDispatch({type: "add_note", payload: {collectionName: formState.selectedCollectionName, noteData: {title: formState.titleValue, body: formState.bodyValue, tags: [], id: "",creationDate: "", lastModified: "" }}})
+        appUiDispatch({type: "hide_modal"})
         console.log("editor submited");
     }
 
     //
     function collectionSelectButtonHandler(collectionName: string) { //the function called each time a collection select option is clicked on
         setFormState((prevState) => {
-            return { ...prevState, selectedCollection: collectionName }
+            return { ...prevState, selectedCollectionName: collectionName }
         })
+
+        toggleCollectionSelectOptionsHandler();
     }
 
-    function toggleCollectionSelectOptionsHandler() {
+    function toggleCollectionSelectOptionsHandler() { //toggle view
+
         setFormState((prevState) => {
             return { ...prevState, showCollectionSelectOptions: prevState.showCollectionSelectOptions ? false : true }
         })
+
     }
 
     return (
 
         <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
-            <div> {/* collection selector*/}
-                <button onClick={toggleCollectionSelectOptionsHandler}>
+            <div className="text-base font-semibold text-neutral-400"> {/* collection selector*/}
+                <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 ">
                     <div className="flex flex-row gap-2 items-center">
-                        <span>{appDataState.currentCollection}</span>
+                        <span>{formState.selectedCollectionName}</span>
                         <span><ArrowDownIcon size="16" /></span>
                     </div>
                 </button>
-                <div className="relative">
+                <div className="relative ">
                     {
-                        formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-0  items-start bg-white ">
-                            {appDataState.collections.map((eachCollection) => {
-                                return (<button onClick={() => { collectionSelectButtonHandler(eachCollection.name) }} className="">{eachCollection.name}</button>)
+                        formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-1 w-fit  items-start bg-white ">
+                            {appDataState.collections.map((eachCollection, index) => {
+                                return (<button key={index} onClick={() => { collectionSelectButtonHandler(eachCollection.name) }} className="p-2">{eachCollection.name}</button>)
                             })}
                         </div>
                     }

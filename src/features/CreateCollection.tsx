@@ -1,9 +1,13 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useContext} from "react"
+
+import { appDataContext, appUiContext } from "@/libs/contexts";
 
 export default function CreateCollection() {
 
+    const {appDataDispatch} = useContext(appDataContext)
+    const {appUiDispatch} = useContext(appUiContext)
 
     const [formState, setFormState] = useState(
         { collectionName: "" }
@@ -18,6 +22,10 @@ export default function CreateCollection() {
 
     function formSubmitHandler(e: React.FormEvent) {
         e.preventDefault();
+
+        appDataDispatch({type: "create_collection", payload: {collectionName: formState.collectionName}})
+        appUiDispatch({type: "hide_modal"});
+        
 
         console.log(formState);
     }
