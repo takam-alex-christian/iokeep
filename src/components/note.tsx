@@ -1,19 +1,11 @@
 "use client"
 
+import { NoteDataType } from '@/libs/Types'
 import React, { useState } from 'react'
 
-export type NoteDataType = {
-    id: string,
-    title: string,
-    body: string,
-    lastModified: string,
-    creationDate: string,
-    tags: string[],
-
-}
 
 type NoteProps = {
-    noteData: NoteDataType | Omit<NoteDataType, "id" | "tags" | "creationDate">,
+    noteData: NoteDataType
 }
 
 export default function Note(props: NoteProps) {
@@ -27,7 +19,7 @@ export default function Note(props: NoteProps) {
 
                 <p className='font-light text-base text-gray'>{props.noteData.body}</p>
 
-                <small className='font-light text-sm text-gray'>{props.noteData.lastModified}</small>
+                <small className='font-light text-sm text-gray'>{props.noteData.lastModified.toString()}</small>
             </div>
             <div> {/* Note click overlay*/}
 

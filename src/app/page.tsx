@@ -9,7 +9,7 @@ import { appUiContext, appDataContext } from "@/libs/contexts" //ui for ui relat
 import { appUiReducer, appDataReducer } from "@/libs/reducers"
 
 //types
-import { AppUiStateType, AppDataStateType, AppUiActionType, AppDataActionType } from "@/libs/Types"
+import { AppUiStateType, AppDataStateType, AppUiActionType, AppDataActionType, CollectionType, NoteDataType } from "@/libs/Types"
 
 import NavBar from '@/features/NavBar'
 import NotesView from '@/features/notesView'
@@ -25,20 +25,36 @@ import CreateCollection from "@/features/CreateCollection"
 
 export default function Home() {
 
+  //just sample data
+  const firstCollectionNotes: NoteDataType[] = [
+    { title: "the world", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+    { title: "the world", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+    { title: "the world", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+    { title: "the world", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] }
+  ]
+
+  const secondCollectionNotes: NoteDataType[] = [
+    { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+    { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+    { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
+  ]
+
+  const fetchedCollections: CollectionType[] = [{ name: "collection01", notes: [...firstCollectionNotes] }, { name: "another02", notes: [...secondCollectionNotes] }]
+
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: ["fake01", "fake02", "fake03", "fake04"], currentCollection: "", notes: [] });
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: fetchedCollections[0].name });
 
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
-
+      <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
       <main className='flex flex-col gap-8'>
         <NavBar />
         <div className='grid grid-cols-lg gap-4 px-16'>
-          <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-            <CollectionNav />
-            <NotesView />
-          </appDataContext.Provider>
+
+          <CollectionNav />
+          <NotesView />
+
           {/* <AddNote /> */}
 
         </div>
@@ -51,6 +67,7 @@ export default function Home() {
         }
 
       </main>
+    </appDataContext.Provider>
     </appUiContext.Provider>
   )
 }

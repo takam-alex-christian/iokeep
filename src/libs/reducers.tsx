@@ -19,7 +19,10 @@ export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType)
 export function appDataReducer(prevState: AppDataStateType, action: AppDataActionType): AppDataStateType{
     switch(action.type){
         case "create_collection": {
-            return {...prevState, collections: [...prevState.collections, action.payload.collectionName]}
+            return {...prevState, collections: [...prevState.collections, {name: action.payload.collectionName, notes: []}]}
+        }
+        case "switch_current_collection": {
+            return {...prevState, currentCollection: action.payload.collectionName} 
         }
         default: {
             throw new Error("invalid action type")

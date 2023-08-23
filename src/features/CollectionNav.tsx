@@ -26,6 +26,12 @@ export default function CollectionNav() {
         appUiDispatch({type: "show_modal", payload: {view: "add_note"}});
     }
 
+
+    function switchCollectionButtonHandler(collectionName: string){//essentially where we dispacht a collection change
+
+        appDataDispatch({type: "switch_current_collection", payload: {collectionName}})
+    }
+
     return (
         <div className="flex flex-col justify-between gap-8 col-span-1">
             {/* utility collections */}
@@ -41,7 +47,7 @@ export default function CollectionNav() {
                     <CollectionButton label={"life lessons"} key={3} /> */}
 
                     {appDataState.collections.map((eachCollection, index)=>{
-                        return (<CollectionButton label={eachCollection} key={index} />)
+                        return (<CollectionButton label={eachCollection.name} onClick={()=>{switchCollectionButtonHandler(eachCollection.name)}} key={index} />)
                     })}
 
                 </div>
@@ -78,11 +84,12 @@ export default function CollectionNav() {
 }
 
 function CollectionButton(props: {
-    label?: string
+    label?: string,
+    onClick?: ()=> void
 }) {
 
     return (
-        <button className="flex flex-row justify-start items-center py-2 px-4 gap-4 ">
+        <button onClick={props.onClick} className="flex flex-row justify-start items-center py-2 px-4 gap-4 ">
             {/* <NoteIcon size="24" color="#000"/> */}
             <DocumentCopy color="#000" />
             <span>{props.label}</span>

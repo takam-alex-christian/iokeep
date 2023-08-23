@@ -11,8 +11,7 @@ const appDataContext = createContext<{
 }>({
     appDataState: {
         collections: [],
-        currentCollection: null,
-        notes: []
+        currentCollection: "",
     },
     appDataDispatch: () => { }
 })
