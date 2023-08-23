@@ -1,13 +1,30 @@
 
 import {useContext} from "react"
 
-import { appDataContext } from "@/libs/contexts"
+import { appDataContext, appUiContext} from "@/libs/contexts"
 
 import { Note as NoteIcon, Trash as TrashIcon, DocumentCopy, Additem as AdditemIcon, Add as AddIcon } from "iconsax-react"
 
 export default function CollectionNav() {
 
     const {appDataState,appDataDispatch} = useContext(appDataContext)
+
+    const {appUiDispatch} = useContext(appUiContext)
+
+    function createCollectionButtonHandler(e: React.MouseEvent<HTMLButtonElement>){ //essentially what happens when you press the "create collection" button
+
+        e.preventDefault();
+        
+        appUiDispatch({type: "show_modal", payload: {view: "create_collection"}})
+
+    }
+
+    function addNoteButtonHandler(e: React.MouseEvent<HTMLButtonElement>){
+        e.preventDefault();
+
+
+        appUiDispatch({type: "show_modal", payload: {view: "add_note"}});
+    }
 
     return (
         <div className="flex flex-col justify-between gap-8 col-span-1">
@@ -22,7 +39,7 @@ export default function CollectionNav() {
                     {/* <CollectionButton label={"Business notes"} key="1" />
                     <CollectionButton label={"Daily planner notes"} key={2} />
                     <CollectionButton label={"life lessons"} key={3} /> */}
-                    
+
                     {appDataState.collections.map((eachCollection, index)=>{
                         return (<CollectionButton label={eachCollection} key={index} />)
                     })}
@@ -37,16 +54,15 @@ export default function CollectionNav() {
                 <hr className="w-4/5 text-slate-100" />
 
                 <div className="flex flex-col gap-2">
-                    <button className="w-fit bg-stone-100 rounded-2xl">
+                    <button onClick={createCollectionButtonHandler} className="w-fit bg-stone-100 rounded-2xl">
                         <div className="flex flex-row gap-4 p-4">
                             <AdditemIcon size={24} color="#000" />
-
                             <span>New collection</span>
                         </div>
 
                     </button>
 
-                    <button className="w-fit bg-green-600 text-white rounded-2xl">
+                    <button onClick={addNoteButtonHandler} className="w-fit bg-green-600 text-white rounded-2xl">
                         <div className="flex flex-row gap-4 p-4">
                             <AddIcon size={24} />
                             <span>Add Note</span>

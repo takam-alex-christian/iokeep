@@ -13,17 +13,24 @@ export type NoteDataType = {
 
 export type AppDataStateType = {
     collections: string[],
-    currentCollection: string | null, 
+    currentCollection: string | null,
     notes: NoteDataType[],
 }
 
-export type AppDataActionType = {type: "create_collection", payload: {collectionName: string}}
+export type AppDataActionType = { type: "create_collection", payload: { collectionName: string } }
 
 export type AppUiStateType = {
     uiMode: "light" | "dark",
+    modalOverlay?: boolean,
+    currentModalView?: "create_collection" | "add_note" | null
 }
 
-export type AppUiActionType = {type: "switched_ui_mode"}
+export type AppUiActionType = { type: "switched_ui_mode" }
+    | {
+        type: "show_modal", payload: {
+            view: "create_collection" | "add_note"
+        }
+    }
 
 // export type NotesContextType ={
 //     noteList: NoteData[],

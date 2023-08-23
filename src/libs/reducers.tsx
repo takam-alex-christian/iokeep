@@ -1,14 +1,16 @@
 import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType} from "./Types";
 
 
-
-
 export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType): AppUiStateType{
 
     switch(action.type){
         case "switched_ui_mode": {
            return  {...prevState, uiMode: prevState.uiMode == "light" ? "dark" : "light" };
-        }default: {
+        }case "show_modal": {
+            return {...prevState, modalOverlay: true, currentModalView: action.payload.view}
+        }
+        
+        default: {
             throw new Error("action type not taken care of");
         }
     }

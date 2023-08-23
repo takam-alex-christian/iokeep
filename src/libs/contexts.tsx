@@ -22,7 +22,7 @@ const appUiContext = createContext<{
     appUiState: AppUiStateType,
     appUiDispatch: Dispatch<AppUiActionType>
 }>({
-    appUiState: { uiMode: "light" },
+    appUiState: { uiMode: "light", modalOverlay: false, currentModalView: null},
     appUiDispatch: () => { }
 })
 

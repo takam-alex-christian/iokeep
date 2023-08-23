@@ -51,8 +51,8 @@ export default function AddNote() {
     }
 
     return (
+
         <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
-            <h3>Utils</h3>
             <form ref={formRef} action="" onSubmit={submitHandler} onFocus={formFocusWithinHandler}>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2 rounded-2xl p-2 focus-within:outline focus-within:outline-1 focus-within:outline-neutral-300">
@@ -67,7 +67,6 @@ export default function AddNote() {
                 </div>
             </form>
         </div>
-
 
 
     )
