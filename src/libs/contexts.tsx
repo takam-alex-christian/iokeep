@@ -25,5 +25,8 @@ const appUiContext = createContext<{
     appUiDispatch: () => { }
 })
 
+//auth related contexts
+
+
 
 export { appDataContext, appUiContext }
