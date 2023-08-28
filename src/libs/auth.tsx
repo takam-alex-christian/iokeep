@@ -7,7 +7,7 @@
 //signup utils
 async function isUsernameAvailable(username: string){
 
-    let response = fetch("/auth/api/?q=check_username&username=" + username, {
+    let response = fetch("/auth/check_username/?username=" + username, {
         method: "GET",
         headers: {
             "Content-Type" : "application/json"
@@ -18,23 +18,35 @@ async function isUsernameAvailable(username: string){
 }
 
 
-
-async function createAccount(props: {
+async function signUp(props: {
     username: string,
     password: string
 }){
-
-    let response = fetch("/user/api", 
+    let response = fetch("/auth/signup", 
     {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
         },
-        body: JSON.stringify(props)
+        body: JSON.stringify({...props})
     })
 
     return (await response).json()
 }
 
+async function signIn(props: {
+    username: string,
+    password: string
+}){
+    let response = fetch("/auth/signin",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({...props})
+    })
 
-export {createAccount, isUsernameAvailable}
+    return (await response).json()
+}
+
+export {isUsernameAvailable, signUp, signIn}

@@ -10,7 +10,7 @@ import LinkButton from "@/components/LinkButton"
 
 
 //lib
-import { isUsernameAvailable, createAccount } from "@/libs/auth"
+import { isUsernameAvailable, signUp } from "@/libs/auth"
 import ErrorComponent from "@/components/ErrorComponent"
 
 interface AuthPageStateType {
@@ -128,16 +128,9 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
         }
     })
 
-    // useEffect(() => {
-
-    //     console.log(formState)
-
-    //     isUsernameAvailable(formState.usernameValue).then(result => {
-    //         console.log(result)
-    //     })
-
-    // }, [formState.usernameValue])
-
+    useEffect(()=>{
+        console.log(formValidationState)
+    }, [formValidationState])
 
     async function usernameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
 
@@ -147,11 +140,21 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
         let isValid: boolean = false
 
         if (e.target.value.length >= validationRulesObject.username.minLength && e.target.value.length <= validationRulesObject.username.maxLength) {
-            isValid = true
-        } else {
+            
+            await isUsernameAvailable(e.target.value).then((jsonResponse)=>{
+                console.log(jsonResponse)
+                if(jsonResponse.available == true){
+                    isValid = true
+                }else {
+                    errorArray.push("username " + e.target.value + " is not available for use. pick another one")
+                }
+            })
+    
+        } else{
             errorArray.push("length should be between " + validationRulesObject.username.minLength + " and " + validationRulesObject.username.maxLength + " characters")
         }
 
+        
         setFormValidationState((prevState) => {
             return { ...prevState, username: { errors: errorArray, isValid: isValid } }
         })
@@ -171,10 +174,10 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
         if (e.target.value.length >= validationRulesObject.password.minLength && e.target.value.length <= validationRulesObject.password.maxLength) {
             isValid = true
-        } else {
+        }else {
             errorArray.push("length should be between " + validationRulesObject.password.minLength + " and " + validationRulesObject.password.maxLength + " characters")
         }
-
+        
         setFormValidationState((prevState) => {
             return { ...prevState, password: { errors: errorArray, isValid: isValid } }
         })
@@ -187,20 +190,17 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
     function confirmPasswordChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         let errorArray: string[] = []
-        let isValid: boolean = true
-
-        if (!formValidationState.password.isValid) {
-            isValid = false;
-            errorArray.push("Your initial password is invalid")
-        }
+        let isValid: boolean = false
 
 
-        if (formState.createPasswordValue !== e.target.value) {
-            isValid = false;
+        if (formState.createPasswordValue == e.target.value) {
+            isValid = true;
+        }else{
             errorArray.push("Both passowrds must be exactly the same")
+
         }
 
-
+        
         setFormValidationState((prevState) => {
             return { ...prevState, confirmPassword: { errors: errorArray, isValid } }
         })
@@ -214,7 +214,7 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
         e.preventDefault();
 
         if (formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid) {
-            createAccount({
+            signUp({
                 username: formState.usernameValue,
                 password: formState.confirmPasswordValue
             }).then((response) => {
@@ -240,26 +240,26 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
                 <InputField placeholder={"Username"} onChangeHandler={usernameChangeHandler} />
                 {
-                    !formValidationState.username.isValid && formValidationState.username.errors.map((error) => {
-                        return <ErrorComponent label={error} />
+                    !formValidationState.username.isValid && formValidationState.username.errors.map((error, index) => {
+                        return <ErrorComponent key={index} label={error} />
                     })
                 }
 
                 <InputField placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
                 {
-                    !formValidationState.password.isValid && formValidationState.password.errors.map((error) => {
-                        return <ErrorComponent label={error} />
+                    !formValidationState.password.isValid && formValidationState.password.errors.map((error, index) => {
+                        return <ErrorComponent key={index} label={error} />
                     })
                 }
 
                 <InputField placeholder={"Confirm password"} onChangeHandler={confirmPasswordChangeHandler} />
                 {
-                    !formValidationState.confirmPassword.isValid && formValidationState.confirmPassword.errors.map((error) => {
-                        return <ErrorComponent label={error} />
+                    !formValidationState.confirmPassword.isValid && formValidationState.confirmPassword.errors.map((error, index) => {
+                        return <ErrorComponent key={index} label={error} />
                     })
                 }
 
-                <PrimaryButton label={"Sign Up"} />
+                <PrimaryButton disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)} label={"Sign Up"} />
 
             </form>
 
