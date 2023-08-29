@@ -1,13 +1,8 @@
 
 import {cookies} from "next/headers"
-
-
-
 export default function Home() {
-  const allCookies = cookies().getAll();
-  
-  console.log(allCookies);
 
+  console.log(cookies().getAll())
   return (
     <div>
       new feature comming soon <br />
