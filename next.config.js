@@ -16,7 +16,11 @@ const nextConfig = {
             {
                 source: '/auth/check_username/:path*',
                 destination: `${API_URL}/auth/check_username/:path*`
-            }
+            },
+            {
+                source: '/user/:path*',
+                destination: `${API_URL}/user/:path*`
+            },
         ]
     }
 }

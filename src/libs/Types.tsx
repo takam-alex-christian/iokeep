@@ -10,13 +10,17 @@ export type NoteDataType = {
     lastModified: Date | string
 }
 
-export type CollectionType = {name: string, notes?: NoteDataType[]}
+export type CollectionDataType = {name: string, notes?: NoteDataType[]}
 
-export type AppDataStateType = {
-    collections: CollectionType[],
-    currentCollection: string,
+export type UserDataType = { //data about the user
+    username: string,
+    // _authToken: string
 }
 
+export type AppDataStateType = {
+    collections: CollectionDataType[],
+    currentCollection: string,
+}
 
 export type AppDataActionType = { type: "create_collection", payload: { collectionName: string } }
 | {type: "switch_current_collection", payload: {collectionName: string}}

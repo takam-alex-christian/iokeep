@@ -1,6 +1,6 @@
 "use client"
 
-import { useReducer } from "react"
+import { useReducer, useEffect } from "react"
 
 //contexts
 import { appUiContext, appDataContext } from "@/libs/contexts" //ui for ui related state and data for data related state
@@ -9,7 +9,7 @@ import { appUiContext, appDataContext } from "@/libs/contexts" //ui for ui relat
 import { appUiReducer, appDataReducer } from "@/libs/reducers"
 
 //types
-import { AppUiStateType, AppDataStateType, AppUiActionType, AppDataActionType, CollectionType, NoteDataType } from "@/libs/Types"
+import { AppUiStateType, AppDataStateType, AppUiActionType, AppDataActionType, CollectionDataType, NoteDataType } from "@/libs/Types"
 
 //components
 import ModalOverlay from "@/components/modaOverlay"
@@ -21,9 +21,11 @@ import NotesView from '@/features/notesView'
 import CollectionNav from '@/features/CollectionNav'
 import AddNote from '@/features/AddNote'
 import CreateCollection from "@/features/CreateCollection"
+import { getUserData } from "@/libs/getDataFromBackend"
 // List pane
 // Display pane
 
+//libs
 
 
 export default function App() {
@@ -42,35 +44,41 @@ export default function App() {
     { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
   ]
 
-  const fetchedCollections: CollectionType[] = [{ name: "collection01", notes: [...firstCollectionNotes] }, { name: "another02", notes: [...secondCollectionNotes] }]
+  const fetchedCollections: CollectionDataType[] = [{ name: "collection01", notes: [...firstCollectionNotes] }, { name: "another02", notes: [...secondCollectionNotes] }]
 
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: fetchedCollections[0].name });
 
+
+  useEffect(() => {
+    getUserData().then((userData)=>{
+      console.log(userData)
+    })
+  }, [])
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-      <main className='flex flex-col gap-8'>
-        <NavBar />
-        <div className='grid grid-cols-lg gap-4 px-16'>
+        <main className='flex flex-col gap-8'>
+          <NavBar />
+          <div className='grid grid-cols-lg gap-4 px-16'>
 
-          <CollectionNav />
-          <NotesView />
+            <CollectionNav />
+            <NotesView />
 
-          {/* <AddNote /> */}
+            {/* <AddNote /> */}
 
-        </div>
+          </div>
 
-        {appUiState.modalOverlay &&
-          <ModalOverlay>
-            {appUiState.currentModalView == "create_collection" && <CreateCollection />}
-            {appUiState.currentModalView == "add_note" && <AddNote />}
-          </ModalOverlay>
-        }
+          {appUiState.modalOverlay &&
+            <ModalOverlay>
+              {appUiState.currentModalView == "create_collection" && <CreateCollection />}
+              {appUiState.currentModalView == "add_note" && <AddNote />}
+            </ModalOverlay>
+          }
 
-      </main>
-    </appDataContext.Provider>
+        </main>
+      </appDataContext.Provider>
     </appUiContext.Provider>
   )
 }
