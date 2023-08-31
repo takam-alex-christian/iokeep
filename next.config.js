@@ -21,6 +21,14 @@ const nextConfig = {
                 source: '/user/:path*',
                 destination: `${API_URL}/user/:path*`
             },
+            {
+                source: '/collections/:path*',
+                destination: `${API_URL}/collections`
+            },
+            {
+                source: '/collection/:path*',
+                destination: `${API_URL}/collection`
+            }
         ]
     }
 }
