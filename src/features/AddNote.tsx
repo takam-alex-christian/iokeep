@@ -6,9 +6,12 @@ import { appDataContext, appUiContext } from "@/libs/contexts";
 
 import { ArrowDown2 as ArrowDownIcon } from "iconsax-react";
 import { NoteDataType } from "@/libs/Types";
+import { useCollections } from "@/libs/getDataFromBackend";
 
 
 export default function AddNote() {
+
+    const {collectionsData, isLoading: isCollectionsDataLoading} = useCollections();
 
     const { appDataState, appDataDispatch } = useContext(appDataContext);
     const {appUiState, appUiDispatch} = useContext(appUiContext);
@@ -30,14 +33,6 @@ export default function AddNote() {
     useEffect(() => {
         titleRef.current?.focus()
     }, [])
-
-    useEffect(() => {
-        console.log(formState)
-    }, [formState])
-
-    useEffect(() => {
-        console.log(appDataState)
-    })
 
     function formFocusWithinHandler() {
         setFormState((prev) => {
@@ -88,7 +83,8 @@ export default function AddNote() {
 
     }
 
-    return (
+    if(isCollectionsDataLoading) return (<div>loading collection options</div>)
+    else return (
 
         <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
             <div className="text-base font-semibold text-neutral-400"> {/* collection selector*/}
@@ -101,7 +97,7 @@ export default function AddNote() {
                 <div className="relative ">
                     {
                         formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-1 w-fit  items-start bg-white ">
-                            {appDataState.collections.map((eachCollection, index) => {
+                            {collectionsData?.collections.map((eachCollection, index) => {
                                 return (<button key={index} onClick={() => { collectionSelectButtonHandler(eachCollection.collectionName) }} className="p-2">{eachCollection.collectionName}</button>)
                             })}
                         </div>
