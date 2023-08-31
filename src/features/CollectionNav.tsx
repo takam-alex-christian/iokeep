@@ -89,34 +89,35 @@ export default function CollectionNav() {
 
 function CollectionList(props: {}) {
 
-    const { collectionsData, isError, isLoading } = useCollections();
+    const { collectionsData, isError, isLoading: isCollectionsDataLoading } = useCollections();
 
-    const {appDataDispatch} = useContext(appDataContext)
+    const { appDataDispatch, appDataState } = useContext(appDataContext)
 
-    useEffect(()=>{
-        console.log(collectionsData)
-    }, [collectionsData])
+    useEffect(() => {
+        if(isCollectionsDataLoading == false){
+            appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData?.collections[0].collectionName, _collectionId: collectionsData?.collections[0]._collectionId } })
+        }
+    }, [isCollectionsDataLoading])
 
     function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
-
-        appDataDispatch({ type: "switch_current_collection", payload: { collectionName } })
+        //
+        appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionName, _collectionId: "" } })
     }
 
 
-    if (isLoading) return (<div>loading collections</div>)
-    else return (
-        <div className="flex flex-col gap-2">
-            {/* <CollectionButton label={"Business notes"} key="1" />
-                    <CollectionButton label={"Daily planner notes"} key={2} />
-                    <CollectionButton label={"life lessons"} key={3} /> */}
+    if (isCollectionsDataLoading) return (<div>loading collections</div>)
+    else
+        return (
+            <div className="flex flex-col gap-2">
 
-            {collectionsData?.collections.map((eachCollection, index) => {
-                return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler(eachCollection.collectionName) }} key={index} />)
-            })}
+                {collectionsData?.collections.map((eachCollection, index) => {
+                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler(eachCollection.collectionName) }} key={index} />)
+                })}
 
-            
-        </div>
-    )
+
+            </div>
+        )
+
 }
 
 function CollectionButton(props: {

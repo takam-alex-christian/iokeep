@@ -36,7 +36,7 @@ export default function CreateCollection() {
 
         console.log(postCollectionToBackend({
             collectionName: formState.collectionName,
-            _id: ""
+            _collectionId: ""
         }))
 
         //@ts-ignore

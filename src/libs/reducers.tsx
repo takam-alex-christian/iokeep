@@ -20,10 +20,10 @@ export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType)
 export function appDataReducer(prevState: AppDataStateType, action: AppDataActionType): AppDataStateType{
     switch(action.type){
         case "create_collection": {
-            return {...prevState, collections: [...prevState.collections, {collectionName: action.payload.collectionName,_id:"", notes: []}]}
+            return {...prevState, collections: [...prevState.collections, {collectionName: action.payload.collectionName,_collectionId:"", notes: []}]}
         }
         case "switch_current_collection": {
-            return {...prevState, currentCollection: {collectionName: action.payload.collectionName, _collectionId: ""}} 
+            return {...prevState, currentCollection: {collectionName: action.payload.collectionName? action.payload.collectionName: "default value" , _collectionId: ""}} 
         }
         case "add_note":{
             

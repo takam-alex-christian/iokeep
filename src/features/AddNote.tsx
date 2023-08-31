@@ -22,7 +22,7 @@ export default function AddNote() {
         bodyValue: "",
 
         focusWithin: false,
-        selectedCollectionName: appDataState.currentCollection,
+        selectedCollectionName: appDataState.currentCollection.collectionName,
         showCollectionSelectOptions: false
     })
 
@@ -61,10 +61,14 @@ export default function AddNote() {
 
         e.preventDefault();
 
-        
+        //the old way of adding a new nodeDt to the appDataContext
+        //may be deleted
+        //@ts-ignore
         appDataDispatch({type: "add_note", payload: {collectionName: formState.selectedCollectionName, noteData: {title: formState.titleValue, body: formState.bodyValue, tags: [], id: "",creationDate: "", lastModified: "" }}})
+        
+
+
         appUiDispatch({type: "hide_modal"})
-        console.log("editor submited");
     }
 
     //
@@ -98,7 +102,7 @@ export default function AddNote() {
                     {
                         formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-1 w-fit  items-start bg-white ">
                             {appDataState.collections.map((eachCollection, index) => {
-                                return (<button key={index} onClick={() => { collectionSelectButtonHandler(eachCollection.name) }} className="p-2">{eachCollection.name}</button>)
+                                return (<button key={index} onClick={() => { collectionSelectButtonHandler(eachCollection.collectionName) }} className="p-2">{eachCollection.collectionName}</button>)
                             })}
                         </div>
                     }

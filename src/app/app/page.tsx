@@ -48,11 +48,11 @@ export default function App() {
     { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
   ]
 
-  const fetchedCollections: CollectionDataType[] = [{ collectionName: "collection01", _id: "", notes: [...firstCollectionNotes] }, { collectionName: "another02",_id: "", notes: [...secondCollectionNotes] }]
+  const fetchedCollections: CollectionDataType[] = [{ collectionName: "collection01", _collectionId: "", notes: [...firstCollectionNotes] }, { collectionName: "another02",_collectionId: "", notes: [...secondCollectionNotes] }]
 
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: {collectionName: fetchedCollections[0].collectionName, _collectionId: ""} });
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: {collectionName: "", _collectionId: ""} });
 
 
 
