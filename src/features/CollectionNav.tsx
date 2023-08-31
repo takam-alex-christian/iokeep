@@ -5,11 +5,12 @@ import { appDataContext, appUiContext } from "@/libs/contexts"
 
 import { Note as NoteIcon, Trash as TrashIcon, DocumentCopy, Additem as AdditemIcon, Add as AddIcon } from "iconsax-react"
 
-import { useUser } from "@/libs/getDataFromBackend"
-import { CollectionDataType } from "@/libs/Types"
+import { useCollections, useUser } from "@/libs/getDataFromBackend"
+
+import type { CollectionDataType } from "@/libs/Types"
+
 
 export default function CollectionNav() {
-
 
 
     const { appDataState, appDataDispatch } = useContext(appDataContext)
@@ -23,6 +24,7 @@ export default function CollectionNav() {
         appUiDispatch({ type: "show_modal", payload: { view: "create_collection" } })
 
     }
+
 
     function addNoteButtonHandler(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -46,16 +48,15 @@ export default function CollectionNav() {
 
                 <h3 className="p-4 text-lg font-bold text-dark">COLLECTIONS </h3>
 
-                <div className="flex flex-col gap-2">
-                    {/* <CollectionButton label={"Business notes"} key="1" />
-                    <CollectionButton label={"Daily planner notes"} key={2} />
-                    <CollectionButton label={"life lessons"} key={3} /> */}
+                {/*previous collection manager*/}
+                {/* <div className="flex flex-col gap-2">
+
 
                     {appDataState.collections.map((eachCollection, index) => {
                         return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
                     })}
 
-                </div>
+                </div> */}
 
                 <CollectionList />
 
@@ -92,23 +93,32 @@ export default function CollectionNav() {
 }
 
 function CollectionList(props: {}) {
-    const { userData, isError, isLoading } = useUser();
+
+    const { collectionsData, isError, isLoading } = useCollections();
+
+    const {appDataDispatch} = useContext(appDataContext)
+
+
+    function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
+
+        appDataDispatch({ type: "switch_current_collection", payload: { collectionName } })
+    }
+
 
     if (isLoading) return (<div>loading collections</div>)
-    else console.log(userData)
-    // return (
-    //     <div className="flex flex-col gap-2">
-    //         {/* <CollectionButton label={"Business notes"} key="1" />
-    //                 <CollectionButton label={"Daily planner notes"} key={2} />
-    //                 <CollectionButton label={"life lessons"} key={3} /> */}
+    else return (
+        <div className="flex flex-col gap-2">
+            {/* <CollectionButton label={"Business notes"} key="1" />
+                    <CollectionButton label={"Daily planner notes"} key={2} />
+                    <CollectionButton label={"life lessons"} key={3} /> */}
 
-    //         {/* {appDataState.collections.map((eachCollection, index) => {
-    //             return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
-    //         })} */}
+            {collectionsData?.collections.map((eachCollection, index) => {
+                return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
+            })}
 
             
-    //     </div>
-    // )
+        </div>
+    )
 }
 
 function CollectionButton(props: {
