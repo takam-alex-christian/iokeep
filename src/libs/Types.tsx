@@ -10,10 +10,11 @@ export type NoteDataType = {
     lastModified: Date | string
 }
 
-export type CollectionDataType = {name: string, notes?: NoteDataType[]}
+export type CollectionDataType = {name: string, _id: string, notes?: NoteDataType[]}
 
 export type UserDataType = { //data about the user
     username: string,
+
     // _authToken: string
 }
 
