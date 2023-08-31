@@ -15,14 +15,13 @@ export default function NotesView() {
     <div className=' col-start-2 col-end-4 relative flex flex-col gap-4 '>
 
       <div className=' flex flex-row justify-between items-center'>
-        <h2 className='text-3xl font-semibold p-4'>{appDataState.currentCollection}</h2>
+        <h2 className='text-3xl font-semibold p-4'>{appDataState.currentCollection.collectionName}</h2>
       </div>
 
 
       {appDataState.collections.map((eachCollection) => {
-        if(eachCollection.name == appDataState.currentCollection) return <NoteLister key={eachCollection.name} collectionNotes={eachCollection.notes ? eachCollection.notes : []} />
+        if(eachCollection.collectionName == appDataState.currentCollection.collectionName) return <NoteLister key={eachCollection.collectionName} collectionNotes={eachCollection.notes ? eachCollection.notes : []} />
       })}
-
 
     </div>
   )

@@ -65,7 +65,7 @@ export default function NavBar() {
                         {
                             navBarState.showProfileOptions && <div className="absolute z-50 right-0 top-0 p-2">
                                 <ul>
-                                    <button>
+                                    <button onClick={()=>{console.log("loggout clicked")}}>
                                         loggout
                                     </button>
                                     <button>

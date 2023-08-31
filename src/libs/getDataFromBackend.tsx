@@ -24,12 +24,14 @@ function useUser() {
 }
 
 function useCollections(){
-    const {data, error, isLoading} = useSWR<{collections: CollectionDataType[]}>("/collections", fetcher)
+
+    const {data, error, isLoading, mutate} = useSWR<{collections: CollectionDataType[]}>("/collections", fetcher)
 
     return {
-        collectionData: data,
+        collectionsData: data,
         isLoading,
-        isError: error
+        isError: error,
+        setCollectionsData: mutate
     }
 }
 

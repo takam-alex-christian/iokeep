@@ -1,4 +1,4 @@
-import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType, CollectionType} from "./Types";
+import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType, CollectionDataType} from "./Types";
 
 
 export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType): AppUiStateType{
@@ -20,17 +20,17 @@ export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType)
 export function appDataReducer(prevState: AppDataStateType, action: AppDataActionType): AppDataStateType{
     switch(action.type){
         case "create_collection": {
-            return {...prevState, collections: [...prevState.collections, {name: action.payload.collectionName, notes: []}]}
+            return {...prevState, collections: [...prevState.collections, {collectionName: action.payload.collectionName,_id:"", notes: []}]}
         }
         case "switch_current_collection": {
-            return {...prevState, currentCollection: action.payload.collectionName} 
+            return {...prevState, currentCollection: {collectionName: action.payload.collectionName, _collectionId: ""}} 
         }
         case "add_note":{
             
             const mutablePrevState = {...prevState}
             
             prevState.collections.forEach((eachCollection, index)=>{
-                if(eachCollection.name == action.payload.collectionName){
+                if(eachCollection.collectionName == action.payload.collectionName){
                     mutablePrevState.collections[index].notes?.push(action.payload.noteData)
                 }
             })

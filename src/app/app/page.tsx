@@ -1,6 +1,6 @@
 "use client"
 
-import { useReducer, useEffect } from "react"
+import { useReducer, useEffect, useState } from "react"
 
 //contexts
 import { appUiContext, appDataContext } from "@/libs/contexts" //ui for ui related state and data for data related state
@@ -21,11 +21,15 @@ import NotesView from '@/features/notesView'
 import CollectionNav from '@/features/CollectionNav'
 import AddNote from '@/features/AddNote'
 import CreateCollection from "@/features/CreateCollection"
-import { getUserData } from "@/libs/getDataFromBackend"
+
+import { getUserData, useUser, useCollections } from "@/libs/getDataFromBackend"
+
 // List pane
 // Display pane
 
 //libs
+
+//thirdparty
 
 
 export default function App() {
@@ -44,18 +48,15 @@ export default function App() {
     { title: "Shanghai is cool", body: " so much text", creationDate: "", lastModified: "", id: "0", tags: [] },
   ]
 
-  const fetchedCollections: CollectionDataType[] = [{ name: "collection01", notes: [...firstCollectionNotes] }, { name: "another02", notes: [...secondCollectionNotes] }]
+  const fetchedCollections: CollectionDataType[] = [{ collectionName: "collection01", _id: "", notes: [...firstCollectionNotes] }, { collectionName: "another02",_id: "", notes: [...secondCollectionNotes] }]
 
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: fetchedCollections[0].name });
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: fetchedCollections, currentCollection: {collectionName: fetchedCollections[0].collectionName, _collectionId: ""} });
 
 
-  useEffect(() => {
-    getUserData().then((userData)=>{
-      console.log(userData)
-    })
-  }, [])
+
+
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
