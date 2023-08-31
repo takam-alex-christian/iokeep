@@ -4,7 +4,15 @@ import React, { useState, useRef, useEffect, useContext} from "react"
 
 import { appDataContext, appUiContext } from "@/libs/contexts";
 
+import { mutate } from "swr";
+
+import { useCollections } from "@/libs/getDataFromBackend";
+import { CollectionDataType } from "@/libs/Types";
+import { postCollectionToBackend } from "@/libs/postDataToBackend";
+
 export default function CreateCollection() {
+
+    const {collectionsData, isLoading: isCollectionsDataLoading} = useCollections()
 
     const {appDataDispatch} = useContext(appDataContext)
     const {appUiDispatch} = useContext(appUiContext)
@@ -23,7 +31,17 @@ export default function CreateCollection() {
     function formSubmitHandler(e: React.FormEvent) {
         e.preventDefault();
 
+        //old fashion of adding collections. this line could be cleared without consequences
         appDataDispatch({type: "create_collection", payload: {collectionName: formState.collectionName}})
+
+        console.log(postCollectionToBackend({
+            collectionName: formState.collectionName,
+            _id: ""
+        }))
+
+        //@ts-ignore
+        mutate("/collections", {collections: [...(collectionsData?.collections), {collectionName: formState.collectionName} as CollectionDataType] })
+        
         appUiDispatch({type: "hide_modal"});
         
 
