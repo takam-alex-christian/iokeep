@@ -1,5 +1,5 @@
 
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 
 import { appDataContext, appUiContext } from "@/libs/contexts"
 
@@ -33,11 +33,6 @@ export default function CollectionNav() {
         appUiDispatch({ type: "show_modal", payload: { view: "add_note" } });
     }
 
-
-    function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
-
-        appDataDispatch({ type: "switch_current_collection", payload: { collectionName } })
-    }
 
     return (
         <div className="flex flex-col justify-between gap-8 col-span-1">
@@ -98,6 +93,9 @@ function CollectionList(props: {}) {
 
     const {appDataDispatch} = useContext(appDataContext)
 
+    useEffect(()=>{
+        console.log(collectionsData)
+    }, [collectionsData])
 
     function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
 
@@ -113,7 +111,7 @@ function CollectionList(props: {}) {
                     <CollectionButton label={"life lessons"} key={3} /> */}
 
             {collectionsData?.collections.map((eachCollection, index) => {
-                return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
+                return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler(eachCollection.collectionName) }} key={index} />)
             })}
 
             
