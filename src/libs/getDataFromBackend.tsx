@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { URL } from "url";
-import { CollectionDataType, UserDataType } from "./Types";
+import { CollectionDataType, NoteDataType, UserDataType } from "./Types";
 
 async function getUserData() {
     let userData = await fetch("/user", {
@@ -35,4 +35,17 @@ function useCollections(){
     }
 }
 
-export { getUserData, useUser, useCollections}
+
+//get's notes with use of _collectionId.
+function useNotes(_collectionId: string ){
+    const {data, error, isLoading, mutate} = useSWR<{notes: NoteDataType[]}>(`/notes?_collectionId=${_collectionId}`, fetcher);
+
+    return {
+        notesData: data,
+        isNotesLoading: isLoading,
+        isNotesError: error,
+        setNotesData: mutate
+    }
+}
+
+export { getUserData, useUser, useCollections, useNotes}

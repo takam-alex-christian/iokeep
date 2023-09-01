@@ -3,9 +3,12 @@
 // note related types
 export type NoteDataType = {
     id: string,
+    _ownerCollectionId?: string,
+
     title: string,
     body: string,
     tags: string[],
+    
     creationDate: Date | string,
     lastModified: Date | string
 }
