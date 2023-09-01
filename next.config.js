@@ -28,6 +28,10 @@ const nextConfig = {
             {
                 source: '/collection/:path*',
                 destination: `${API_URL}/collection`
+            },
+            {
+                source: '/notes/:path*',
+                destination: `${API_URL}/notes`
             }
         ]
     }
