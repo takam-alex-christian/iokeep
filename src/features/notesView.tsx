@@ -7,13 +7,13 @@ import { appDataContext } from '@/libs/contexts'
 import { Hashtag as HashtagIcon } from "iconsax-react"
 
 import { NoteDataType } from '@/libs/Types'
-import { useCollections } from '@/libs/getDataFromBackend'
+import { useCollections, useNotes } from '@/libs/getDataFromBackend'
 
 export default function NotesView() {
 
   const { appDataState } = useContext(appDataContext)
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("note view")
     console.log(appDataState)
   }, [appDataState])
@@ -25,19 +25,23 @@ export default function NotesView() {
         <CurrentCollectionName />
       </div>
 
-      {appDataState.collections.map((eachCollection) => {
-        if (eachCollection.collectionName == appDataState.currentCollection.collectionName) return <NoteLister key={eachCollection.collectionName} collectionNotes={eachCollection.notes ? eachCollection.notes : []} />
-      })}
-
+      <NoteLister />
     </div>
   )
 }
 
 
-function NoteLister(props: { collectionNotes: NoteDataType[] }) {
-  return (
+function NoteLister() {
+
+  const { appDataState } = useContext(appDataContext);
+
+  const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
+  const {isLoading: isCollectionsDataLoading} = useCollections();
+
+  if (isNotesLoading || isCollectionsDataLoading) return (<div>Notes loading...</div>) 
+  else return (
     <div className='grid grid-cols-3 gap-2'>
-      {props.collectionNotes.map((eachNote, index) => {
+      {notesData?.notes.map((eachNote, index) => {
         return (<Note key={index} noteData={eachNote} />)
       })}
     </div>
@@ -47,7 +51,7 @@ function NoteLister(props: { collectionNotes: NoteDataType[] }) {
 function CurrentCollectionName() {
 
   const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections()
-  const {appDataState} = useContext(appDataContext)
+  const { appDataState } = useContext(appDataContext)
 
   if (isCollectionsDataLoading) return (<div>Loading Collection name...</div>)
   else return (

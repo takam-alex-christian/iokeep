@@ -6,15 +6,16 @@ import { appDataContext, appUiContext } from "@/libs/contexts";
 
 import { ArrowDown2 as ArrowDownIcon } from "iconsax-react";
 import { NoteDataType } from "@/libs/Types";
-import { useCollections } from "@/libs/getDataFromBackend";
+import { useCollections, useNotes } from "@/libs/getDataFromBackend";
+import { postNoteToBackend } from "@/libs/postDataToBackend";
 
 
 export default function AddNote() {
-
-    const {collectionsData, isLoading: isCollectionsDataLoading} = useCollections();
-
     const { appDataState, appDataDispatch } = useContext(appDataContext);
-    const {appUiState, appUiDispatch} = useContext(appUiContext);
+    const { appUiState, appUiDispatch } = useContext(appUiContext);
+
+    const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections();
+    const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
 
     const formRef = useRef<HTMLFormElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -25,7 +26,10 @@ export default function AddNote() {
         bodyValue: "",
 
         focusWithin: false,
-        selectedCollectionName: appDataState.currentCollection.collectionName,
+        selectedCollection:{
+            collectionName: appDataState.currentCollection.collectionName,
+            _collectionId: appDataState.currentCollection._collectionId,
+        } ,
         showCollectionSelectOptions: false
     })
 
@@ -33,6 +37,10 @@ export default function AddNote() {
     useEffect(() => {
         titleRef.current?.focus()
     }, [])
+
+    useEffect(()=>{
+        console.log(formState.selectedCollection)
+    }, [formState.selectedCollection])
 
     function formFocusWithinHandler() {
         setFormState((prev) => {
@@ -52,24 +60,27 @@ export default function AddNote() {
         })
     }
 
-    function submitHandler(e: React.FormEvent): void {
+    async function submitHandler(e: React.FormEvent) {
 
         e.preventDefault();
 
         //the old way of adding a new nodeDt to the appDataContext
         //may be deleted
         //@ts-ignore
-        appDataDispatch({type: "add_note", payload: {collectionName: formState.selectedCollectionName, noteData: {title: formState.titleValue, body: formState.bodyValue, tags: [], id: "",creationDate: "", lastModified: "" }}})
+        appDataDispatch({ type: "add_note", payload: { collectionName: formState.selectedCollectionName, noteData: { title: formState.titleValue, body: formState.bodyValue, tags: [], id: "", creationDate: "", lastModified: "" } } })
         
 
+        await postNoteToBackend({id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: ""}).then((response)=>{
+            console.log(response)
+        })
 
-        appUiDispatch({type: "hide_modal"})
+        appUiDispatch({ type: "hide_modal" })
     }
 
     //
-    function collectionSelectButtonHandler(collectionName: string) { //the function called each time a collection select option is clicked on
+    function collectionSelectButtonHandler({collectionName, _collectionId}: {collectionName: string, _collectionId: string}) { //the function called each time a collection select option is clicked on
         setFormState((prevState) => {
-            return { ...prevState, selectedCollectionName: collectionName }
+            return { ...prevState, selectedCollection:{collectionName: collectionName, _collectionId: _collectionId} }
         })
 
         toggleCollectionSelectOptionsHandler();
@@ -83,14 +94,14 @@ export default function AddNote() {
 
     }
 
-    if(isCollectionsDataLoading) return (<div>loading collection options</div>)
+    if (isCollectionsDataLoading || isNotesLoading) return (<div>loading ...</div>)
     else return (
 
         <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
             <div className="text-base font-semibold text-neutral-400"> {/* collection selector*/}
                 <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 ">
                     <div className="flex flex-row gap-2 items-center">
-                        <span>{formState.selectedCollectionName}</span>
+                        <span>{formState.selectedCollection.collectionName}</span>
                         <span><ArrowDownIcon size="16" /></span>
                     </div>
                 </button>
@@ -98,7 +109,7 @@ export default function AddNote() {
                     {
                         formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-1 w-fit  items-start bg-white ">
                             {collectionsData?.collections.map((eachCollection, index) => {
-                                return (<button key={index} onClick={() => { collectionSelectButtonHandler(eachCollection.collectionName) }} className="p-2">{eachCollection.collectionName}</button>)
+                                return (<button key={index} onClick={() => { collectionSelectButtonHandler({collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId}) }} className="p-2">{eachCollection.collectionName}</button>)
                             })}
                         </div>
                     }

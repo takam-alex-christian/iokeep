@@ -93,10 +93,13 @@ function CollectionList(props: {}) {
 
     const { appDataDispatch, appDataState } = useContext(appDataContext)
 
+
+    //should be removed
     useEffect(() => {
         if(isCollectionsDataLoading == false){
             appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData?.collections[0].collectionName, _collectionId: collectionsData?.collections[0]._collectionId } })
         }
+        
     }, [isCollectionsDataLoading])
 
     function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
