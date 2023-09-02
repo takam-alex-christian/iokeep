@@ -23,7 +23,7 @@ export function appDataReducer(prevState: AppDataStateType, action: AppDataActio
             return {...prevState, collections: [...prevState.collections, {collectionName: action.payload.collectionName,_collectionId:"", notes: []}]}
         }
         case "switch_current_collection": {
-            return {...prevState, currentCollection: {collectionName: action.payload.collectionName? action.payload.collectionName: "default value" , _collectionId: ""}} 
+            return {...prevState, currentCollection: {collectionName: action.payload.collectionName? action.payload.collectionName: "default value" , _collectionId: action.payload._collectionId? action.payload._collectionId : "no Id"}} 
         }
         case "add_note":{
             

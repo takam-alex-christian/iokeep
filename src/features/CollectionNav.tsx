@@ -102,9 +102,9 @@ function CollectionList(props: {}) {
         
     }, [isCollectionsDataLoading])
 
-    function switchCollectionButtonHandler(collectionName: string) {//essentially where we dispacht a collection change
+    function switchCollectionButtonHandler({collectionName, _collectionId}: {collectionName: string, _collectionId: string}) {//essentially where we dispacht a collection change
         //
-        appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionName, _collectionId: "" } })
+        appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionName, _collectionId: _collectionId } })
     }
 
 
@@ -114,7 +114,7 @@ function CollectionList(props: {}) {
             <div className="flex flex-col gap-2">
 
                 {collectionsData?.collections.map((eachCollection, index) => {
-                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler(eachCollection.collectionName) }} key={index} />)
+                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId}) }} key={index} />)
                 })}
 
 

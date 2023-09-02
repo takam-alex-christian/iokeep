@@ -12,6 +12,8 @@ import { useCollections, useNotes } from '@/libs/getDataFromBackend'
 export default function NotesView() {
 
   const { appDataState } = useContext(appDataContext)
+  
+  const {isLoading: isCollectionsDataLoading} = useCollections()
 
   useEffect(() => {
     console.log("note view")
@@ -25,7 +27,8 @@ export default function NotesView() {
         <CurrentCollectionName />
       </div>
 
-      <NoteLister />
+      {isCollectionsDataLoading == false && <NoteLister />}
+
     </div>
   )
 }
@@ -35,8 +38,12 @@ function NoteLister() {
 
   const { appDataState } = useContext(appDataContext);
 
-  const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
   const {isLoading: isCollectionsDataLoading} = useCollections();
+  const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
+  
+  useEffect(()=>{
+    console.log(appDataState.currentCollection)
+  })
 
   if (isNotesLoading || isCollectionsDataLoading) return (<div>Notes loading...</div>) 
   else return (
