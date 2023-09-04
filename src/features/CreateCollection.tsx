@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect, useContext} from "react"
+import React, { useState, useRef, useEffect, useContext } from "react"
 
 import { appDataContext, appUiContext } from "@/libs/contexts";
 
@@ -12,10 +12,10 @@ import { postCollectionToBackend } from "@/libs/postDataToBackend";
 
 export default function CreateCollection() {
 
-    const {collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData} = useCollections()
+    const { collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData } = useCollections()
 
-    const {appDataDispatch} = useContext(appDataContext)
-    const {appUiDispatch} = useContext(appUiContext)
+    const { appDataDispatch } = useContext(appDataContext)
+    const { appUiDispatch } = useContext(appUiContext)
 
     const [formState, setFormState] = useState(
         { collectionName: "" }
@@ -23,41 +23,30 @@ export default function CreateCollection() {
 
     const collectionNameRef = useRef<HTMLInputElement>(null);
 
-    useEffect(()=>{
+    useEffect(() => {
         collectionNameRef.current?.focus();
         console.log("collectionNameRef is focused");
     }, [])
 
+
     function formSubmitHandler(e: React.FormEvent) {
-        let collectionsDataCopy: CollectionDataType[] = [];
 
-        collectionsDataCopy = collectionsData? collectionsData?.collections.slice(0): []
-
-
-
+        
         e.preventDefault();
 
         //old fashion of adding collections. this line could be cleared without consequences
-        appDataDispatch({type: "create_collection", payload: {collectionName: formState.collectionName}})
+        appDataDispatch({ type: "create_collection", payload: { collectionName: formState.collectionName } })
 
-        //time to do something about 
+        setCollectionsData({...collectionsData, collections: [...(collectionsData ? collectionsData?.collections.slice(0) : []), { collectionName: formState.collectionName, _collectionId: "" }] })
+        mutate("/collections")
+        
         postCollectionToBackend({
             collectionName: formState.collectionName,
             _collectionId: ""
-        }).then((res)=>{
-            
         })
-        
-        //bound mutation
-        setCollectionsData({collections: [ ...collectionsDataCopy, {collectionName: formState.collectionName, _collectionId: ""}] })
-        
-        //to invalidate current Collection data
-        mutate("/collections"); 
 
-        appUiDispatch({type: "hide_modal"});
-        
+        appUiDispatch({ type: "hide_modal" });
 
-        console.log(formState);
     }
 
     function collectionNameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {

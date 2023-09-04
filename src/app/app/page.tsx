@@ -39,7 +39,7 @@ export default function App() {
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: [], currentCollection: {collectionName: "", _collectionId: ""} });
 
-
+  
 
 
   return (

@@ -97,9 +97,11 @@ function CollectionList(props: {}) {
     //should be removed
     useEffect(() => {
         if(isCollectionsDataLoading == false){
-            appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData?.collections[0].collectionName, _collectionId: collectionsData?.collections[0]._collectionId } })
+            appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData && collectionsData.collections.length > 0 ? collectionsData?.collections[0].collectionName: "", _collectionId: collectionsData && collectionsData.collections.length > 0? collectionsData?.collections[0]._collectionId : ""} })
         }
+        console.log("collection data in the useEffect")
         
+        console.log(collectionsData)
     }, [isCollectionsDataLoading])
 
     function switchCollectionButtonHandler({collectionName, _collectionId}: {collectionName: string, _collectionId: string}) {//essentially where we dispacht a collection change

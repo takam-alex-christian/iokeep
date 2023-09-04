@@ -17,7 +17,7 @@ export default function AddNote() {
     const { appUiState, appUiDispatch } = useContext(appUiContext);
 
     const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections();
-    const { notesData, isNotesLoading, setNotesData } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
+    const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
 
     const formRef = useRef<HTMLFormElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
