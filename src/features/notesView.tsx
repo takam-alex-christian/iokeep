@@ -42,10 +42,11 @@ function NoteLister() {
   const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
   
   useEffect(()=>{
-    console.log(appDataState.currentCollection)
+    console.log("within the noteLister")
+    console.log(appDataState.currentCollection);
   })
 
-  if (isNotesLoading || isCollectionsDataLoading) return (<div>Notes loading...</div>) 
+  if (isNotesLoading) return (<div>Notes loading...</div>) 
   else return (
     <div className='grid grid-cols-3 gap-2'>
       {notesData?.notes.map((eachNote, index) => {

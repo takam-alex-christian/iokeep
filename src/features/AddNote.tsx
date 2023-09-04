@@ -70,7 +70,7 @@ export default function AddNote() {
         appDataDispatch({ type: "add_note", payload: { collectionName: formState.selectedCollectionName, noteData: { title: formState.titleValue, body: formState.bodyValue, tags: [], id: "", creationDate: "", lastModified: "" } } })
         
 
-        await postNoteToBackend({id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: ""}).then((response)=>{
+        await postNoteToBackend({_id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: ""}).then((response)=>{
             console.log(response)
         })
 

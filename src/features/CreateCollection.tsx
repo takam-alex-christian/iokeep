@@ -12,7 +12,7 @@ import { postCollectionToBackend } from "@/libs/postDataToBackend";
 
 export default function CreateCollection() {
 
-    const {collectionsData, isLoading: isCollectionsDataLoading} = useCollections()
+    const {collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData} = useCollections()
 
     const {appDataDispatch} = useContext(appDataContext)
     const {appUiDispatch} = useContext(appUiContext)
@@ -29,19 +29,31 @@ export default function CreateCollection() {
     }, [])
 
     function formSubmitHandler(e: React.FormEvent) {
+        let collectionsDataCopy: CollectionDataType[] = [];
+
+        collectionsDataCopy = collectionsData? collectionsData?.collections.slice(0): []
+
+
+
         e.preventDefault();
 
         //old fashion of adding collections. this line could be cleared without consequences
         appDataDispatch({type: "create_collection", payload: {collectionName: formState.collectionName}})
 
-        console.log(postCollectionToBackend({
+        //time to do something about 
+        postCollectionToBackend({
             collectionName: formState.collectionName,
             _collectionId: ""
-        }))
-
-        //@ts-ignore
-        mutate("/collections", {collections: [...(collectionsData?.collections), {collectionName: formState.collectionName} as CollectionDataType] })
+        }).then((res)=>{
+            
+        })
         
+        //bound mutation
+        setCollectionsData({collections: [ ...collectionsDataCopy, {collectionName: formState.collectionName, _collectionId: ""}] })
+        
+        //to invalidate current Collection data
+        mutate("/collections"); 
+
         appUiDispatch({type: "hide_modal"});
         
 

@@ -2,7 +2,7 @@
 
 // note related types
 export type NoteDataType = {
-    id: string,
+    _id: string,
     _ownerCollectionId?: string,
 
     title: string,
