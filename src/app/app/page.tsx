@@ -30,6 +30,9 @@ import { getUserData, useUser, useCollections } from "@/libs/getDataFromBackend"
 //libs
 
 //thirdparty
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 
 export default function App() {
@@ -39,7 +42,7 @@ export default function App() {
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: [], currentCollection: {collectionName: "", _collectionId: ""} });
 
-  
+
 
 
   return (
