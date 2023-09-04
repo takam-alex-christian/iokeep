@@ -18,7 +18,10 @@ export default function CreateCollection() {
     const { appUiDispatch } = useContext(appUiContext)
 
     const [formState, setFormState] = useState(
-        { collectionName: "" }
+        { 
+            collectionName: "",
+            isCollectionNameAvailable: true
+        }
     )
 
     const collectionNameRef = useRef<HTMLInputElement>(null);
@@ -50,9 +53,17 @@ export default function CreateCollection() {
     }
 
     function collectionNameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-        setFormState((prev) => {
-            return { ...prev, collectionName: e.target.value }
+        
+        let isAvailable: boolean
+
+        collectionsData?.collections.forEach((eachCollection)=>{
+            isAvailable = eachCollection.collectionName !== e.target.value? true : false;
         })
+
+        setFormState((prev) => {
+            return { ...prev, collectionName: e.target.value, isCollectionNameAvailable: isAvailable }
+        })
+
     }
 
     return (
@@ -63,7 +74,7 @@ export default function CreateCollection() {
                         <input ref={collectionNameRef} type="text" onChange={collectionNameChangeHandler} value={formState.collectionName} placeholder="Collection Name" className="w-full p-4 text-base font-semibold focus:outline-none" />
                     </div>
                     <div>
-                        <button className="w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl">Create Collection</button>
+                        <button className={`w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500`} disabled={formState.isCollectionNameAvailable? false : true}>Create Collection</button>
                     </div>
                 </div>
             </form>
