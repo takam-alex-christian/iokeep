@@ -4,6 +4,8 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { appDataContext, appUiContext } from "@/libs/contexts";
 
+import {mutate} from "swr"
+
 import { ArrowDown2 as ArrowDownIcon } from "iconsax-react";
 import { NoteDataType } from "@/libs/Types";
 import { useCollections, useNotes } from "@/libs/getDataFromBackend";
@@ -15,7 +17,7 @@ export default function AddNote() {
     const { appUiState, appUiDispatch } = useContext(appUiContext);
 
     const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections();
-    const { notesData, isNotesLoading } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
+    const { notesData, isNotesLoading, setNotesData } = useNotes(appDataState.currentCollection._collectionId) //we pass the currentCollection Id instead
 
     const formRef = useRef<HTMLFormElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -60,7 +62,8 @@ export default function AddNote() {
         })
     }
 
-    async function submitHandler(e: React.FormEvent) {
+    function submitHandler(e: React.FormEvent) {
+        let notesDataCopy: NoteDataType[] = notesData? notesData?.notes.slice(0): []
 
         e.preventDefault();
 
@@ -69,9 +72,14 @@ export default function AddNote() {
         //@ts-ignore
         appDataDispatch({ type: "add_note", payload: { collectionName: formState.selectedCollectionName, noteData: { title: formState.titleValue, body: formState.bodyValue, tags: [], id: "", creationDate: "", lastModified: "" } } })
         
-
-        await postNoteToBackend({_id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: ""}).then((response)=>{
+        //just for the visual of having something happening right after addition
+        mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}` ,{...notesData, notes: [...notesDataCopy, {_id: "", body: formState.bodyValue, title: formState.titleValue, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId,creationDate: "", lastModified: ""} as NoteDataType]})
+        
+        console.log(notesData)
+        
+        postNoteToBackend({_id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: ""}).then((response)=>{
             console.log(response)
+            
         })
 
         appUiDispatch({ type: "hide_modal" })
