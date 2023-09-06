@@ -16,7 +16,7 @@ export default function CreateCollection() {
 
     const { collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData } = useCollections()
 
-    const { appDataDispatch } = useContext(appDataContext)
+    const { appDataDispatch, appDataState } = useContext(appDataContext)
     const { appUiDispatch } = useContext(appUiContext)
 
     const [formState, setFormState] = useState({ collectionName: "" })
@@ -62,7 +62,6 @@ export default function CreateCollection() {
     }
 
     function formSubmitHandler(e: React.FormEvent) {
-
 
         e.preventDefault();
 

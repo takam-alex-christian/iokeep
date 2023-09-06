@@ -17,6 +17,8 @@ export default function CollectionNav() {
 
     const { appUiDispatch } = useContext(appUiContext)
 
+    const {collectionsData} = useCollections();
+
     function createCollectionButtonHandler(e: React.MouseEvent<HTMLButtonElement>) { //essentially what happens when you press the "create collection" button
 
         e.preventDefault();
@@ -42,6 +44,13 @@ export default function CollectionNav() {
             <div className="flex flex-col gap-4 ">
 
                 <h3 className="p-4 text-lg font-bold text-dark">COLLECTIONS </h3>
+
+                {
+                    collectionsData?.collections.length == 0 &&
+                    <div className="px-4 text-base font-semibold text-dark">
+                        No collection
+                    </div>
+                }
 
                 <CollectionList />
 
@@ -84,17 +93,7 @@ function CollectionList(props: {}) {
     const { appDataDispatch, appDataState } = useContext(appDataContext)
 
 
-    //should be removed
-    useEffect(() => {
-        if(isCollectionsDataLoading == false){
-            appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData && collectionsData.collections.length > 0 ? collectionsData?.collections[0].collectionName: "", _collectionId: collectionsData && collectionsData.collections.length > 0? collectionsData?.collections[0]._collectionId : ""} })
-        }
-        console.log("collection data in the useEffect")
-        
-        console.log(collectionsData)
-    }, [isCollectionsDataLoading])
-
-    function switchCollectionButtonHandler({collectionName, _collectionId}: {collectionName: string, _collectionId: string}) {//essentially where we dispacht a collection change
+    function switchCollectionButtonHandler({ collectionName, _collectionId }: { collectionName: string, _collectionId: string }) {//essentially where we dispacht a collection change
         //
         appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionName, _collectionId: _collectionId } })
     }
@@ -106,7 +105,7 @@ function CollectionList(props: {}) {
             <div className="flex flex-col gap-2">
 
                 {collectionsData?.collections.map((eachCollection, index) => {
-                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId}) }} key={index} />)
+                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }} key={index} />)
                 })}
 
 
