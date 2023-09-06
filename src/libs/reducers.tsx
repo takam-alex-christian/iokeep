@@ -20,7 +20,7 @@ export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType)
 export function appDataReducer(prevState: AppDataStateType, action: AppDataActionType): AppDataStateType{
     switch(action.type){
         case "switch_current_collection": {
-            return {...prevState, currentCollection: {collectionName: action.payload.collectionName? action.payload.collectionName: "default value" , _collectionId: action.payload._collectionId? action.payload._collectionId : "no Id"}} 
+            return {...prevState, currentCollection: {collectionName: action.payload.collectionName? action.payload.collectionName: "" , _collectionId: action.payload._collectionId? action.payload._collectionId : ""}} 
         }
         default: {
             throw new Error("invalid action type")

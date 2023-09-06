@@ -43,16 +43,6 @@ export default function CollectionNav() {
 
                 <h3 className="p-4 text-lg font-bold text-dark">COLLECTIONS </h3>
 
-                {/*previous collection manager*/}
-                {/* <div className="flex flex-col gap-2">
-
-
-                    {appDataState.collections.map((eachCollection, index) => {
-                        return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
-                    })}
-
-                </div> */}
-
                 <CollectionList />
 
                 {/* <hr className=" text-slate-100" />

@@ -27,7 +27,7 @@ export default function NotesView() {
         <CurrentCollectionName />
       </div>
 
-      {isCollectionsDataLoading == false && <NoteLister />}
+      {<NoteLister />}
 
     </div>
   )
