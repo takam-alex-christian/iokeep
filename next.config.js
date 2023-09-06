@@ -18,6 +18,10 @@ const nextConfig = {
                 destination: `${API_URL}/auth/check_username/:path*`
             },
             {
+                source: '/auth/signout/:path*',
+                destination: `${API_URL}/auth/signout/:path*`
+            },
+            {
                 source: '/user/:path*',
                 destination: `${API_URL}/user/:path*`
             },
