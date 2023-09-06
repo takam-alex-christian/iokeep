@@ -66,12 +66,6 @@ export default function AddNote() {
         let notesDataCopy: NoteDataType[] = notesData? notesData?.notes.slice(0): []
 
         e.preventDefault();
-
-        //the old way of adding a new nodeDt to the appDataContext
-        //may be deleted
-        //@ts-ignore
-        appDataDispatch({ type: "add_note", payload: { collectionName: formState.selectedCollectionName, noteData: { title: formState.titleValue, body: formState.bodyValue, tags: [], id: "", creationDate: "", lastModified: "" } } })
-        
         //just for the visual of having something happening right after addition
         mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}` ,{...notesData, notes: [...notesDataCopy, {_id: "", body: formState.bodyValue, title: formState.titleValue, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId,creationDate: "", lastModified: ""} as NoteDataType]})
         
