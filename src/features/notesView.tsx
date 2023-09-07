@@ -9,6 +9,7 @@ import { Hashtag as HashtagIcon, Additem as AdditemIcon } from "iconsax-react"
 import { NoteDataType } from '@/libs/Types'
 import { useCollections, useNotes } from '@/libs/getDataFromBackend'
 import Heading from '@/components/Heading'
+import BlockLoadingPlaceholder from '@/components/BlockLoadingPlaceholder'
 
 export default function NotesView() {
 
@@ -58,9 +59,7 @@ export default function NotesView() {
       }
 
       {isCollectionsDataLoading == true &&
-        <div>
-          Loading collection name and notes
-        </div>
+        <BlockLoadingPlaceholder />
       }
 
     </div>
@@ -126,7 +125,7 @@ function NoteLister() {
     console.log(appDataState.currentCollection);
   })
 
-  if (isNotesLoading) return (<div>Notes loading...</div>)
+  if (isNotesLoading) return (<BlockLoadingPlaceholder />)
   else return (
     <>
       {notesData && notesData?.notes.length > 0 && <div className='grid grid-cols-3 gap-2'>
@@ -147,7 +146,7 @@ function CurrentCollectionName() {
   const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections()
   const { appDataState } = useContext(appDataContext)
 
-  if (isCollectionsDataLoading) return (<div>Loading Collection name...</div>)
+  if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
   else return (
     <h2 className='text-3xl font-semibold p-4'>{appDataState.currentCollection.collectionName}</h2>
   )

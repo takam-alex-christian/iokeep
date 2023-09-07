@@ -8,6 +8,7 @@ import { Note as NoteIcon, Trash as TrashIcon, DocumentCopy, Additem as AdditemI
 import { useCollections, useUser } from "@/libs/getDataFromBackend"
 
 import type { CollectionDataType } from "@/libs/Types"
+import BlockLoadingPlaceholder from "@/components/BlockLoadingPlaceholder"
 
 
 export default function CollectionNav() {
@@ -99,7 +100,7 @@ function CollectionList(props: {}) {
     }
 
 
-    if (isCollectionsDataLoading) return (<div>loading collections</div>)
+    if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
     else
         return (
             <div className="flex flex-col gap-2">
