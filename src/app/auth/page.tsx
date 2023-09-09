@@ -170,7 +170,7 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <InputField placeholder={"Pa***ord"} onChangeHandler={passwordChangeHandler} />
+                <InputField type="password" placeholder={"Pa***ord"} onChangeHandler={passwordChangeHandler} />
 
                 {formValidationState.password.isValid == false && formValidationState.password.errors.length > 0 &&
                     formValidationState.password.errors.map((eachError, index) => {
@@ -346,14 +346,14 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <InputField placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
+                <InputField type="password" placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
                 {
                     !formValidationState.password.isValid && formValidationState.password.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
                     })
                 }
 
-                <InputField placeholder={"Confirm password"} onChangeHandler={confirmPasswordChangeHandler} />
+                <InputField type="password" placeholder={"Confirm password"} onChangeHandler={confirmPasswordChangeHandler} />
                 {
                     !formValidationState.confirmPassword.isValid && formValidationState.confirmPassword.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
