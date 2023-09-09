@@ -48,8 +48,8 @@ export default function Auth() {
         }
     )
 
-    useEffect(()=>{
-        if(authPageState.authenticated == true) redirect("/app");
+    useEffect(() => {
+        if (authPageState.authenticated == true) redirect("/app");
     }, [authPageState.authenticated])
 
     return (
@@ -62,6 +62,8 @@ export default function Auth() {
     )
 }
 
+
+//sign in form
 function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState: React.Dispatch<React.SetStateAction<AuthPageStateType>> }) {
 
 
@@ -141,11 +143,11 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
                 //if we succeed we redirect to app
                 if (jsonResponse.succeeded == true) {
-                    
+
                     console.log("signin successful. what next ?")
 
-                    props.setAuthPageState((prevState)=>{
-                        return {...prevState, authenticated: true}
+                    props.setAuthPageState((prevState) => {
+                        return { ...prevState, authenticated: true }
                     });
                 }
 
@@ -176,7 +178,9 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <PrimaryButton disabled={!(formValidationState.username.isValid && formValidationState.password.isValid)} label={"Sign In"} />
+                <PrimaryButton
+                    // disabled={ formValidationState.password.errors.length> 0 && formValidationState.password.isValid == false || formValidationState.username.errors.length >0 && formValidationState.username.isValid == false}
+                    label={"Sign In"} />
 
             </form>
 
@@ -188,6 +192,9 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
         </div>
     )
 }
+
+
+//signup form
 
 function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState: React.Dispatch<React.SetStateAction<AuthPageStateType>> }) {
     //formstate adapted to accomodate errorState for each individual form
@@ -309,8 +316,8 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                 //we use local storage to store the auth token
 
                 //we updated the page's authenticated state
-                props.setAuthPageState((prevState)=>{
-                    return {...prevState, authenticated: true}
+                props.setAuthPageState((prevState) => {
+                    return { ...prevState, authenticated: true }
                 })
 
                 //on subsequent launches, we can just check wether _authToken exist in local memory
@@ -353,7 +360,9 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <PrimaryButton disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)} label={"Sign Up"} />
+                <PrimaryButton 
+                // disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)}
+                label={"Sign Up"} />
 
             </form>
 
