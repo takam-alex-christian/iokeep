@@ -4,7 +4,8 @@
 import React, { useEffect, useState } from "react"
 
 //next
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 
 //components
 import PrimaryButton from "@/components/PrimaryButton"
@@ -39,11 +40,14 @@ interface AuthPageStateType {
     authenticated: boolean
 }
 
-export default function Auth() {
 
+
+export default function Auth() {
+    const searchParams = useSearchParams()
+    
     const [authPageState, setAuthPageState] = useState<AuthPageStateType>(
         {
-            activeForm: "sign_in",
+            activeForm: searchParams.get("selectedForm") !== null? searchParams.get("selectedForm") as "sign_in" | "sign_up": "sign_in",
             authenticated: false
         }
     )
