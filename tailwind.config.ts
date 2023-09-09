@@ -20,7 +20,11 @@ const config: Config = {
       gridTemplateColumns:{
         lg: "0.50fr 1fr 0.50fr",
         "nav-lg": "0.5fr 1fr 0.5fr",
-        "editor-lg": "0.25fr 1fr"
+        "editor-lg": "0.25fr 1fr",
+
+        "main-lg": "max-content 1fr", //collectionNav and notesView
+        "main-sm": "1fr", // phones
+
       }
     },
   },
