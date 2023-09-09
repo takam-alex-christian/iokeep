@@ -53,7 +53,7 @@ export default function Auth() {
     }, [authPageState.authenticated])
 
     return (
-        <main className="w-screen h-screen">
+        <main className="w-screen h-screen px-4">
             <div className=" flex justify-center items-center w-full h-full">
                 {authPageState.activeForm == "sign_in" && <SignInForm authPageState={authPageState} setAuthPageState={setAuthPageState} />} {/*the signin form is displayed*/}
                 {authPageState.activeForm == "sign_up" && <SignUpForm authPageState={authPageState} setAuthPageState={setAuthPageState} />}

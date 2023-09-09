@@ -36,7 +36,7 @@ export default function NotesView() {
   }, [collectionsData])
 
   return (
-    <div className=' col-start-2 col-end-4 relative flex flex-col gap-4 '>
+    <div className=' relative flex flex-col gap-4 '>
 
       {isCollectionsDataLoading == false &&
         <>
@@ -128,7 +128,7 @@ function NoteLister() {
   if (isNotesLoading) return (<BlockLoadingPlaceholder />)
   else return (
     <>
-      {notesData && notesData?.notes.length > 0 && <div className='grid grid-cols-3 gap-2'>
+      {notesData && notesData?.notes.length > 0 && <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2'>
         {notesData?.notes.map((eachNote, index) => {
           return (<Note key={index} noteData={eachNote} />)
         })}

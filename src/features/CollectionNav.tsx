@@ -38,7 +38,7 @@ export default function CollectionNav() {
 
 
     return (
-        <div className="flex flex-col justify-between gap-8 col-span-1">
+        <div className="flex flex-col justify-between gap-8">
             {/* utility collections */}
 
 
