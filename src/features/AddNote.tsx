@@ -54,7 +54,7 @@ export default function AddNote() {
             return { ...prevState, errorsIfAny, isFormDataValid }
         })
 
-    }, [formState])
+    }, [formState, validateFormData])
 
     //test code
     useEffect(() => {

@@ -33,7 +33,7 @@ export default function NotesView() {
         appDataDispatch({ type: "switch_current_collection", payload: { collectionName: "", _collectionId: "" } })
       }
     }
-  }, [collectionsData])
+  }, [collectionsData, appDataDispatch, appDataState, isCollectionsDataLoading])
 
   return (
     <div className=' min-h-[calc(100vh-132px)] relative flex flex-col gap-4 '>
