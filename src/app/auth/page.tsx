@@ -189,7 +189,7 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
             <div>
                 <p className="flex flex-row gap-4 items-center justify-center text-center">
-                    <span>Don't have and account ?</span><LinkButton label="SignUp" onClick={() => { props.setAuthPageState((prevState) => { return { ...prevState, activeForm: "sign_up" } }) }} />
+                    <span>Don\'t have and account ?</span><LinkButton label="SignUp" onClick={() => { props.setAuthPageState((prevState) => { return { ...prevState, activeForm: "sign_up" } }) }} />
                 </p>
             </div>
         </div>
