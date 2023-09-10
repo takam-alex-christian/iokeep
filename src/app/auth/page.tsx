@@ -183,7 +183,6 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                 }
 
                 <PrimaryButton
-                    // disabled={ formValidationState.password.errors.length> 0 && formValidationState.password.isValid == false || formValidationState.username.errors.length >0 && formValidationState.username.isValid == false}
                     label={"Sign In"} />
 
             </form>
