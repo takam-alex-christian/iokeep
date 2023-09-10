@@ -40,17 +40,14 @@ config.autoAddCss = false
 export default function App() {
 
   
-  const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
+  const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, {currentCollection: {collectionName: "", _collectionId: ""} });
-
-
-
 
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-        <main className='flex flex-col gap-8'>
+        <main className={'h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light"? "bg-white" : "bg-zinc-900"}` }>
 
           <FloatingPlusButton />
 

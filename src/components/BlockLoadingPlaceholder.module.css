@@ -2,7 +2,6 @@
 .placeholderLoading{
     height: 100%;
     overflow: hidden;
-    background: #000;
     position: relative;
     
     animation-duration: 1.7s;
@@ -10,8 +9,16 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     animation-name: placeholderAnimate;
-    background: #f6f7f8; 
+    background-color: #272727;
+
+}
+
+.light{
     background: linear-gradient(to right, #eee 2%, #ddd 18%, #eee 33%);
+}
+
+.dark{
+    background: linear-gradient(to right, #27272A 2%, #29292c 18%, #27272A 33%);
 }
 
 @keyframes placeholderAnimate {
