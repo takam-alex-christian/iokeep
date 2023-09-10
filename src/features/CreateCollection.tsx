@@ -102,8 +102,8 @@ export default function CreateCollection() {
                         className={"w-full p-4 text-base font-semibold focus:outline-none bg-transparent " + `${appUiState.uiMode == "light"? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
                     </div>
 
-                    {formValidation.isCollectionNameValid == false && formValidation.showError && formValidation.errors.map((eachError) => {
-                        return (<ErrorComponent label={eachError} />)
+                    {formValidation.isCollectionNameValid == false && formValidation.showError && formValidation.errors.map((eachError, index) => {
+                        return (<ErrorComponent key={index} label={eachError} />)
                     })}
 
                     <div>
