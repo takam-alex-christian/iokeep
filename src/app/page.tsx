@@ -1,7 +1,7 @@
 
 import { cookies } from "next/headers"
 
-import IokeepIcon from "@/components/IokeepIcon"
+import IokeepIcon from "@/components/IokeepLogo"
 
 import PrimaryButton from "@/components/PrimaryButton"
 import Link from "next/link"
