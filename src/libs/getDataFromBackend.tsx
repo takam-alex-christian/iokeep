@@ -39,9 +39,9 @@ function useCollections(){
 
 
 //get's notes with use of _collectionId.
-function useNotes(_collectionId: string ){
+function useNotes(){
     const {appDataState} = useContext(appDataContext);
-    const {data, error, isLoading, mutate} = useSWR<{notes: NoteDataType[]}>(appDataState.currentCollection._collectionId.length > 0 ? `/notes?_collectionId=${_collectionId}`: null, fetcher);
+    const {data, error, isLoading, mutate} = useSWR<{notes: NoteDataType[]}>(appDataState.currentCollection._collectionId.length > 0 ? `/notes?_collectionId=${appDataState.currentCollection._collectionId}`: null, fetcher);
 
     return {
         notesData: data,

@@ -22,11 +22,10 @@ export type UserDataType = { //data about the user
 }
 
 export type AppDataStateType = {
-    collections: CollectionDataType[],
     currentCollection: {
         collectionName: string,
         _collectionId: string
-    },
+    }
 }
 
 export type AppDataActionType = { type: "create_collection", payload: { collectionName: string } }

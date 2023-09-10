@@ -1,0 +1,27 @@
+
+.placeholderLoading{
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    
+    animation-duration: 1.7s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: placeholderAnimate;
+    background-color: #272727;
+
+}
+
+.light{
+    background: linear-gradient(to right, #eee 2%, #ddd 18%, #eee 33%);
+}
+
+.dark{
+    background: linear-gradient(to right, #27272A 2%, #29292c 18%, #27272A 33%);
+}
+
+@keyframes placeholderAnimate {
+    0%{ background-position: -650px 0; }
+    100%{ background-position: 650px 0; }
+}

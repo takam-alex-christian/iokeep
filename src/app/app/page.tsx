@@ -32,25 +32,27 @@ import { getUserData, useUser, useCollections } from "@/libs/getDataFromBackend"
 //thirdparty
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import AddButtonGroup from "@/components/AddButtonGroup"
+import FloatingPlusButton from "@/features/FloatingPlusButton"
 config.autoAddCss = false
 
 
 export default function App() {
 
   
-  const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "light", modalOverlay: false });
+  const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { collections: [], currentCollection: {collectionName: "", _collectionId: ""} });
-
-
-
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, {currentCollection: {collectionName: "", _collectionId: ""} });
 
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-        <main className='flex flex-col gap-8'>
+        <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-900"}` }>
+
+          <FloatingPlusButton />
+
           <NavBar />
-          <div className='grid grid-cols-lg gap-4 px-16'>
+          <div className='grid grid-cols-1 sm:grid-cols-main-lg  gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-4 lg:px-8 xl:px-16'>
 
             <CollectionNav />
             <NotesView />

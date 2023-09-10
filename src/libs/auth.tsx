@@ -49,4 +49,15 @@ async function signIn(props: {
     return (await response).json()
 }
 
-export {isUsernameAvailable, signUp, signIn}
+async function signOut(){
+    let response = fetch ("/auth/signout", {
+        method: "Post",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    return (await response).json()
+}
+
+export {isUsernameAvailable, signUp, signIn, signOut}

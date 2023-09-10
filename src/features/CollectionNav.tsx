@@ -8,6 +8,7 @@ import { Note as NoteIcon, Trash as TrashIcon, DocumentCopy, Additem as AdditemI
 import { useCollections, useUser } from "@/libs/getDataFromBackend"
 
 import type { CollectionDataType } from "@/libs/Types"
+import BlockLoadingPlaceholder from "@/components/BlockLoadingPlaceholder"
 
 
 export default function CollectionNav() {
@@ -15,7 +16,9 @@ export default function CollectionNav() {
 
     const { appDataState, appDataDispatch } = useContext(appDataContext)
 
-    const { appUiDispatch } = useContext(appUiContext)
+    const { appUiDispatch, appUiState } = useContext(appUiContext)
+
+    const { collectionsData } = useCollections();
 
     function createCollectionButtonHandler(e: React.MouseEvent<HTMLButtonElement>) { //essentially what happens when you press the "create collection" button
 
@@ -35,23 +38,20 @@ export default function CollectionNav() {
 
 
     return (
-        <div className="flex flex-col justify-between gap-8 col-span-1">
+        <div className="flex flex-col justify-between gap-8">
             {/* utility collections */}
 
 
             <div className="flex flex-col gap-4 ">
 
-                <h3 className="p-4 text-lg font-bold text-dark">COLLECTIONS </h3>
+                <h3 className={"p-4 text-lg font-bold " + `${appUiState.uiMode == "light" ? "text-zinc-800" : "text-zinc-500"}`}>COLLECTIONS </h3>
 
-                {/*previous collection manager*/}
-                {/* <div className="flex flex-col gap-2">
-
-
-                    {appDataState.collections.map((eachCollection, index) => {
-                        return (<CollectionButton label={eachCollection.name} onClick={() => { switchCollectionButtonHandler(eachCollection.name) }} key={index} />)
-                    })}
-
-                </div> */}
+                {
+                    collectionsData?.collections.length == 0 &&
+                    <div className={"px-4 text-base font-semibold " + `${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zing-600"}`}>
+                        No collection
+                    </div>
+                }
 
                 <CollectionList />
 
@@ -61,18 +61,22 @@ export default function CollectionNav() {
                     <button><div className="flex flex-row gap-4 px-4 py-2"><TrashIcon size={24} color="#000" /> <span>Trash</span></div></button>
                 </div> */}
 
-                <hr className="w-4/5 text-slate-100" />
+                <hr className={"w-4/5  " + `${appUiState.uiMode == "light" ? "text-zinc-300" : "text-zinc-800"}`} />
 
                 <div className="flex flex-col gap-2">
-                    <button onClick={createCollectionButtonHandler} className="w-fit bg-stone-100 rounded-2xl">
+                    <button
+                        onClick={createCollectionButtonHandler}
+                        className={"w-fit  rounded-2xl " + `${appUiState.uiMode == "light"? "bg-stone-100 text-zinc-700" : "bg-zinc-700 text-zinc-400"}`}>
                         <div className="flex flex-row gap-4 p-4">
-                            <AdditemIcon size={24} color="#000" />
+                            <AdditemIcon size={24} color={`${appUiState.uiMode == "light"? "#474E41" : "#959E99"}`} />
                             <span>New collection</span>
                         </div>
 
                     </button>
 
-                    <button onClick={addNoteButtonHandler} className="w-fit bg-green-600 text-white rounded-2xl">
+                    <button
+                        onClick={addNoteButtonHandler}
+                        className="w-fit bg-green-600 text-white rounded-2xl">
                         <div className="flex flex-row gap-4 p-4">
                             <AddIcon size={24} />
                             <span>Add Note</span>
@@ -94,29 +98,19 @@ function CollectionList(props: {}) {
     const { appDataDispatch, appDataState } = useContext(appDataContext)
 
 
-    //should be removed
-    useEffect(() => {
-        if(isCollectionsDataLoading == false){
-            appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionsData && collectionsData.collections.length > 0 ? collectionsData?.collections[0].collectionName: "", _collectionId: collectionsData && collectionsData.collections.length > 0? collectionsData?.collections[0]._collectionId : ""} })
-        }
-        console.log("collection data in the useEffect")
-        
-        console.log(collectionsData)
-    }, [isCollectionsDataLoading])
-
-    function switchCollectionButtonHandler({collectionName, _collectionId}: {collectionName: string, _collectionId: string}) {//essentially where we dispacht a collection change
+    function switchCollectionButtonHandler({ collectionName, _collectionId }: { collectionName: string, _collectionId: string }) {//essentially where we dispacht a collection change
         //
         appDataDispatch({ type: "switch_current_collection", payload: { collectionName: collectionName, _collectionId: _collectionId } })
     }
 
 
-    if (isCollectionsDataLoading) return (<div>loading collections</div>)
+    if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
     else
         return (
             <div className="flex flex-col gap-2">
 
                 {collectionsData?.collections.map((eachCollection, index) => {
-                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId}) }} key={index} />)
+                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }} key={index} />)
                 })}
 
 
@@ -130,11 +124,13 @@ function CollectionButton(props: {
     onClick?: () => void
 }) {
 
+    const { appUiState } = useContext(appUiContext)
+
     return (
         <button onClick={props.onClick} className="flex flex-row justify-start items-center py-2 px-4 gap-4 ">
             {/* <NoteIcon size="24" color="#000"/> */}
-            <DocumentCopy color="#000" />
-            <span>{props.label}</span>
+            <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
+            <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
         </button>
     )
 }

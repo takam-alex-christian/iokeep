@@ -4,7 +4,8 @@
 import React, { useEffect, useState } from "react"
 
 //next
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 
 //components
 import PrimaryButton from "@/components/PrimaryButton"
@@ -39,21 +40,24 @@ interface AuthPageStateType {
     authenticated: boolean
 }
 
-export default function Auth() {
 
+
+export default function Auth() {
+    const searchParams = useSearchParams()
+    
     const [authPageState, setAuthPageState] = useState<AuthPageStateType>(
         {
-            activeForm: "sign_in",
+            activeForm: searchParams.get("selectedForm") !== null? searchParams.get("selectedForm") as "sign_in" | "sign_up": "sign_in",
             authenticated: false
         }
     )
 
-    useEffect(()=>{
-        if(authPageState.authenticated == true) redirect("/app");
+    useEffect(() => {
+        if (authPageState.authenticated == true) redirect("/app");
     }, [authPageState.authenticated])
 
     return (
-        <main className="w-screen h-screen">
+        <main className="w-screen h-screen px-4">
             <div className=" flex justify-center items-center w-full h-full">
                 {authPageState.activeForm == "sign_in" && <SignInForm authPageState={authPageState} setAuthPageState={setAuthPageState} />} {/*the signin form is displayed*/}
                 {authPageState.activeForm == "sign_up" && <SignUpForm authPageState={authPageState} setAuthPageState={setAuthPageState} />}
@@ -62,6 +66,8 @@ export default function Auth() {
     )
 }
 
+
+//sign in form
 function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState: React.Dispatch<React.SetStateAction<AuthPageStateType>> }) {
 
 
@@ -141,11 +147,11 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
                 //if we succeed we redirect to app
                 if (jsonResponse.succeeded == true) {
-                    
+
                     console.log("signin successful. what next ?")
 
-                    props.setAuthPageState((prevState)=>{
-                        return {...prevState, authenticated: true}
+                    props.setAuthPageState((prevState) => {
+                        return { ...prevState, authenticated: true }
                     });
                 }
 
@@ -168,7 +174,7 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <InputField placeholder={"Pa***ord"} onChangeHandler={passwordChangeHandler} />
+                <InputField type="password" placeholder={"Pa***ord"} onChangeHandler={passwordChangeHandler} />
 
                 {formValidationState.password.isValid == false && formValidationState.password.errors.length > 0 &&
                     formValidationState.password.errors.map((eachError, index) => {
@@ -176,7 +182,8 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <PrimaryButton disabled={!(formValidationState.username.isValid && formValidationState.password.isValid)} label={"Sign In"} />
+                <PrimaryButton
+                    label={"Sign In"} />
 
             </form>
 
@@ -188,6 +195,9 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
         </div>
     )
 }
+
+
+//signup form
 
 function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState: React.Dispatch<React.SetStateAction<AuthPageStateType>> }) {
     //formstate adapted to accomodate errorState for each individual form
@@ -309,8 +319,8 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                 //we use local storage to store the auth token
 
                 //we updated the page's authenticated state
-                props.setAuthPageState((prevState)=>{
-                    return {...prevState, authenticated: true}
+                props.setAuthPageState((prevState) => {
+                    return { ...prevState, authenticated: true }
                 })
 
                 //on subsequent launches, we can just check wether _authToken exist in local memory
@@ -339,21 +349,23 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <InputField placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
+                <InputField type="password" placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
                 {
                     !formValidationState.password.isValid && formValidationState.password.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
                     })
                 }
 
-                <InputField placeholder={"Confirm password"} onChangeHandler={confirmPasswordChangeHandler} />
+                <InputField type="password" placeholder={"Confirm password"} onChangeHandler={confirmPasswordChangeHandler} />
                 {
                     !formValidationState.confirmPassword.isValid && formValidationState.confirmPassword.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
                     })
                 }
 
-                <PrimaryButton disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)} label={"Sign Up"} />
+                <PrimaryButton 
+                // disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)}
+                label={"Sign Up"} />
 
             </form>
 

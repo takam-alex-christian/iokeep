@@ -16,8 +16,8 @@ export default function CreateCollection() {
 
     const { collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData } = useCollections()
 
-    const { appDataDispatch } = useContext(appDataContext)
-    const { appUiDispatch } = useContext(appUiContext)
+    const { appDataDispatch, appDataState } = useContext(appDataContext)
+    const { appUiDispatch, appUiState } = useContext(appUiContext)
 
     const [formState, setFormState] = useState({ collectionName: "" })
 
@@ -35,9 +35,9 @@ export default function CreateCollection() {
 
     useEffect(() => {
         let collectionValidationObject = validateCollectionName();
-        
-        setFormValidation((prevState)=>{
-            return { ...prevState, isCollectionNameValid: collectionValidationObject.isValid, errors: collectionValidationObject.errors}
+
+        setFormValidation((prevState) => {
+            return { ...prevState, isCollectionNameValid: collectionValidationObject.isValid, errors: collectionValidationObject.errors }
         })
 
     }, [formState.collectionName])
@@ -52,7 +52,7 @@ export default function CreateCollection() {
         }
 
         collectionsData?.collections.forEach((eachCollection) => {
-            if (eachCollection.collectionName == formState.collectionName) {
+            if (eachCollection.collectionName.toLowerCase() == formState.collectionName.toLowerCase()) {
                 isValid = false;
                 errors.push(`A collection already exist with the name ${formState.collectionName}`);
             }
@@ -62,7 +62,6 @@ export default function CreateCollection() {
     }
 
     function formSubmitHandler(e: React.FormEvent) {
-
 
         e.preventDefault();
 
@@ -81,26 +80,34 @@ export default function CreateCollection() {
     function collectionNameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
 
         setFormState((prev) => {
-            if(prev.collectionName.length > 0) setFormValidation((prevState)=>{return {...prevState, showError: true}})
+            if (prev.collectionName.length > 0) setFormValidation((prevState) => { return { ...prevState, showError: true } })
             return { ...prev, collectionName: e.target.value }
         })
 
     }
 
     return (
-        <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
+        <div className={"rounded-3xl max-w-lg w-full p-4 shadow-xl " + `${appUiState.uiMode == "light" ? "bg-zinc-100 " : "bg-zinc-800"}`}>
             <form action="" onSubmit={formSubmitHandler}>
                 <div className="flex flex-col gap-4">
-                    <div className=" rounded-2xl focus-within:outline focus-within:outline-1 focus-within:outline-neutral-300 ">
-                        <input ref={collectionNameRef} type="text" onChange={collectionNameChangeHandler} value={formState.collectionName} placeholder="Collection Name" className="w-full p-4 text-base font-semibold focus:outline-none" />
+                    <div
+                        className={" rounded-2xl overflow-hidden outline outline-1  " + `${appUiState.uiMode == "light" ? "outline-zinc-300  focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl"}`}>
+                        
+                        <input 
+                        ref={collectionNameRef} 
+                        type="text" 
+                        onChange={collectionNameChangeHandler} 
+                        value={formState.collectionName} 
+                        placeholder="Collection Name" 
+                        className={"w-full p-4 text-base font-semibold focus:outline-none bg-transparent " + `${appUiState.uiMode == "light"? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
                     </div>
+
+                    {formValidation.isCollectionNameValid == false && formValidation.showError && formValidation.errors.map((eachError) => {
+                        return (<ErrorComponent label={eachError} />)
+                    })}
+
                     <div>
-                        {formValidation.isCollectionNameValid == false && formValidation.showError &&  formValidation.errors.map((eachError) => {
-                            return (<ErrorComponent label={eachError} />)
-                        })}
-                    </div>
-                    <div>
-                        <button className={`w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500`} disabled={ formValidation.isCollectionNameValid !== true && formValidation.showError == true? true : false }>Create Collection</button>
+                        <button className={`w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500`} disabled={formValidation.isCollectionNameValid !== true && formValidation.showError == true ? true : false}>Create Collection</button>
                     </div>
                 </div>
             </form>
