@@ -36,7 +36,7 @@ export default function NotesView() {
   }, [collectionsData])
 
   return (
-    <div className=' h-[calc(100vh-132px)] relative flex flex-col gap-4 '>
+    <div className=' min-h-[calc(100vh-132px)] relative flex flex-col gap-4 '>
 
       {isCollectionsDataLoading == false &&
         <>

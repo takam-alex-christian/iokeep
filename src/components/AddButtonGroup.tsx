@@ -33,7 +33,7 @@ export default function AddButtonGroup(props: { justify?: "start" | "center" | "
             <div className="flex flex-row w-full justify-end">
                 <button
                     onClick={createCollectionButtonHandler}
-                    className=" w-fit bg-stone-100 rounded-2xl">
+                    className="shadow-lg w-fit bg-stone-100 rounded-2xl">
                     <div className="flex flex-row items-center gap-4 p-4">
                         <FontAwesomeIcon icon={faPlus} />
                         <span>New collection</span>
@@ -44,7 +44,7 @@ export default function AddButtonGroup(props: { justify?: "start" | "center" | "
             <div className={`flex flex-row w-full justify-${typeof(props.justify) !== "undefined"? props.justify : "start"}`}>
                 <button
                     onClick={addNoteButtonHandler}
-                    className="relative right-0 w-fit bg-green-600 text-white rounded-2xl">
+                    className="shadow-lg relative right-0 w-fit bg-green-600 text-white rounded-2xl">
                     <div className="flex flex-row items-center gap-4 p-4">
                         <FontAwesomeIcon icon={faPlus} />
                         <span>Add Note</span>

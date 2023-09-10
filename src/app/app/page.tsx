@@ -47,7 +47,7 @@ export default function App() {
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-        <main className={'h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light"? "bg-white" : "bg-zinc-900"}` }>
+        <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-900"}` }>
 
           <FloatingPlusButton />
 

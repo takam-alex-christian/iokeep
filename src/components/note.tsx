@@ -44,7 +44,7 @@ export default function Note(props: NoteProps) {
     const DateString = `${daysOfTheWeek[noteDate.getDay()]}, ${monthsOfTheYear[noteDate.getMonth()]} ${noteDate.getDate()}, ${noteDate.getFullYear()}`
 
     return (
-        <article className={' rounded-2xl ' + `${appUiState.uiMode== 'light' ? "bg-light-gray" : "bg-zinc-800"}`}>
+        <article className={' rounded-2xl ' + `${appUiState.uiMode== 'light' ? "bg-zinc-100" : "bg-zinc-800"}`}>
 
             <div className='flex flex-col p-5 gap-3 justify-between h-full'>{/* Note container*/}
                 <div className='flex flex-col gap-3 overflow-hidden text-ellipsis'>

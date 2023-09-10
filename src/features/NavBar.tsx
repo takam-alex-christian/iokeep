@@ -37,10 +37,10 @@ export default function NavBar() {
     }
 
     return (
-        <nav className={` grid grid-cols-nav-lg w-full items-center gap-4 py-4 px-16 h-fit shadow-md ${appUiState.uiMode == "light" ? "bg-stone-50" : "bg-zinc-800"}`}>
+        <nav className={` grid grid-cols-nav-lg w-full items-center gap-4 py-4 px-2 sm:px-4 lg:px-8 xl:px-16 h-fit shadow-md ${appUiState.uiMode == "light" ? "bg-stone-50" : "bg-zinc-800"}`}>
             <div className="flex flex-row gap-2 items-center">
                 <IokeepLogo />
-                <div className="flex justify-center items-center w-6 h-6 bg-green-300 text-green-700 text-sm font-semibold rounded-full">v1</div>
+                <div className="flex justify-center items-center py-1 px-2 bg-green-200 text-green-700 text-sm font-semibold rounded-full">v1.00</div>
             </div>
 
             <SearchBar />
