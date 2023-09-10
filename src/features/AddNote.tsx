@@ -54,12 +54,7 @@ export default function AddNote() {
             return { ...prevState, errorsIfAny, isFormDataValid }
         })
 
-    }, [formState, validateFormData])
-
-    //test code
-    useEffect(() => {
-        console.log(formState.selectedCollection)
-    }, [formState.selectedCollection])
+    }, [formState])
 
     function validateFormData(): { isFormDataValid: boolean, errorsIfAny: string[] } {
         let isFormDataValid: boolean = true;

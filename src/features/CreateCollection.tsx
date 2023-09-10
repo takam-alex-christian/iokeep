@@ -40,7 +40,7 @@ export default function CreateCollection() {
             return { ...prevState, isCollectionNameValid: collectionValidationObject.isValid, errors: collectionValidationObject.errors }
         })
 
-    }, [formState.collectionName, validateCollectionName])
+    }, [formState.collectionName])
 
     function validateCollectionName() {
         let isValid: boolean = true;
