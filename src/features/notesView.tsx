@@ -53,7 +53,7 @@ export default function NotesView() {
 
             </>}
 
-          {collectionsData?.collections.length == 0 && <CreateACollectionView />}
+          {collectionsData?.collections.length == 0 && <CreateACollectionViewIfEmpty />}
 
         </>
       }
@@ -67,15 +67,16 @@ export default function NotesView() {
 }
 
 //if no collection is forund, prompt the user to create a collection
-function CreateACollectionView() {
+function CreateACollectionViewIfEmpty() {
 
   const { appUiDispatch } = useContext(appUiContext)
 
   return (
-    <div className='text-center'>
+    <div className='text-center flex flex-col gap-2'>
       <Heading label='Start by creating a collection.' />
-      <p>It's a place where to can store and organise your notes</p>
-      <div>
+
+      <div className='flex flex-col gap-4 items-center justify-center'>
+        <p>It's a place where you can store and organise your notes <br /> as collectibles.</p>
         <button
           onClick={() => { appUiDispatch({ type: "show_modal", payload: { view: "create_collection" } }) }}
           className="w-fit bg-stone-100 rounded-2xl">
@@ -90,14 +91,15 @@ function CreateACollectionView() {
   )
 }
 
-function CreateANoteView() {
+function CreateANoteViewIfEmpty() {
   const { appUiDispatch } = useContext(appUiContext)
 
   return (
-    <div className='text-center'>
+    <div className='text-center flex flex-col gap-2'>
       <Heading label='This Collection is Empty' />
-      <p>let's add some notes to this collection</p>
-      <div>
+
+      <div className='flex flex-col gap-4 justify-center items-center'>
+        <p>Add collectible notes.</p>
         <button
           onClick={() => { appUiDispatch({ type: "show_modal", payload: { view: "add_note" } }) }}
           className="w-fit bg-stone-100 rounded-2xl">
@@ -135,7 +137,7 @@ function NoteLister() {
       </div>}
 
       {
-        notesData?.notes.length == 0 && <CreateANoteView />
+        notesData?.notes.length == 0 && <CreateANoteViewIfEmpty />
       }
     </>
   )
