@@ -48,7 +48,7 @@ export default function AddNote() {
     }, [])
 
     useEffect(() => {
-        let {errorsIfAny, isFormDataValid} = validateFormData();
+        let { errorsIfAny, isFormDataValid } = validateFormData();
 
         setFormValidationState((prevState) => {
             return { ...prevState, errorsIfAny, isFormDataValid }
@@ -61,7 +61,7 @@ export default function AddNote() {
         console.log(formState.selectedCollection)
     }, [formState.selectedCollection])
 
-    function validateFormData(): {isFormDataValid: boolean, errorsIfAny: string[]} {
+    function validateFormData(): { isFormDataValid: boolean, errorsIfAny: string[] } {
         let isFormDataValid: boolean = true;
         const errorsIfAny: string[] = [];
 
@@ -70,12 +70,12 @@ export default function AddNote() {
             errorsIfAny.push("Your note cannot be empty")
         }
 
-        return {isFormDataValid, errorsIfAny}
+        return { isFormDataValid, errorsIfAny }
     }
 
-    function setShowError(): void{
-        setFormValidationState((prevState)=>{
-            return {...prevState, showError: true}
+    function setShowError(): void {
+        setFormValidationState((prevState) => {
+            return { ...prevState, showError: true }
         })
     }
 
@@ -142,19 +142,23 @@ export default function AddNote() {
     if (isCollectionsDataLoading || isNotesLoading) return (<div>loading ...</div>)
     else return (
 
-        <div className="rounded-3xl max-w-lg w-full p-4 bg-white">
-            <div className="text-base font-semibold text-neutral-400"> {/* collection selector*/}
-                <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 ">
+        <div className={"rounded-3xl max-w-lg w-full p-4 shadow-md " + `${appUiState.uiMode == "light" ? "bg-zinc-100" : "bg-zinc-800"}`}>
+            <div className="text-base  text-neutral-400"> {/* collection selector*/}
+                <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 font-semibold">
                     <div className="flex flex-row gap-2 items-center">
                         <span>{formState.selectedCollection.collectionName}</span>
                         <span><ArrowDownIcon size="16" /></span>
                     </div>
                 </button>
-                <div className="relative ">
+                <div className={`relative`}>
                     {
-                        formState.showCollectionSelectOptions && <div className="absolute flex flex-col gap-1 w-fit  items-start bg-white ">
+                        formState.showCollectionSelectOptions && 
+                        <div 
+                        className={"absolute flex flex-col w-fit items-start shadow-md rounded-lg overflow-hidden " + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-900"}`}>
                             {collectionsData?.collections.map((eachCollection, index) => {
-                                return (<button key={index} onClick={() => { collectionSelectButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }} className="p-2">{eachCollection.collectionName}</button>)
+                                return (<button key={index}
+                                    onClick={() => { collectionSelectButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }}
+                                    className={"py-1 px-4 bg-transparent font-normal " + `${appUiState.uiMode == "light"? "text-zinc-700" : "text-zinc-500"}`}>{eachCollection.collectionName}</button>)
                             })}
                         </div>
                     }
@@ -163,9 +167,23 @@ export default function AddNote() {
             <form ref={formRef} action="" onSubmit={submitHandler} onFocus={formFocusWithinHandler}>
 
                 <div className="flex flex-col gap-4">
-                    <div className="flex flex-col gap-2 rounded-2xl p-2 focus-within:outline focus-within:outline-1 focus-within:outline-neutral-300">
-                        <input ref={titleRef} maxLength={50} type="text" onChange={titleChangeHandler} value={formState.titleValue} placeholder="Take a note" className="focus:outline-none  text-neutral-600 font-bold text-lg" />
-                        <textarea placeholder={">"} maxLength={200} ref={bodyRef} onChange={bodyChangeHandler} value={formState.bodyValue} spellCheck={false} className="focus:outline-none min-h-[8em] resize-none text-neutral-500" />
+                    <div className={"flex flex-col gap-2 rounded-2xl p-2 outline outline-1  " +  `${appUiState.uiMode == "light"? "outline-zinc-300 focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl "}`}>
+                        <input
+                            ref={titleRef}
+                            maxLength={50}
+                            type="text"
+                            onChange={titleChangeHandler}
+                            value={formState.titleValue}
+                            placeholder="Take a note"
+                            className={"focus:outline-none font-medium text-lg bg-transparent " + `${appUiState.uiMode == "light" ? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
+                        <textarea
+                            placeholder={"the main content of your note goes here!"}
+                            maxLength={200}
+                            ref={bodyRef}
+                            onChange={bodyChangeHandler}
+                            value={formState.bodyValue}
+                            spellCheck={false}
+                            className={"focus:outline-none font-normal min-h-[8em] resize-none bg-transparent " + `${appUiState.uiMode == "light"? "text-zinc-700 placeholder:text-zinc-400" : "text-zinc-600 placeholder:text-zinc-700"}`} />
                         <div className="text-xs font-normal text-neutral-400">{formState.bodyValue.length + formState.titleValue.length} Characters</div>
                     </div>
 
@@ -183,7 +201,6 @@ export default function AddNote() {
                 </div>
             </form>
         </div>
-
 
     )
 }
