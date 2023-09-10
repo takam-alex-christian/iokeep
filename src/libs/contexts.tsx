@@ -1,4 +1,4 @@
-
+"use client"
 
 import { createContext, Dispatch } from "react"
 
@@ -10,7 +10,6 @@ const appDataContext = createContext<{
     appDataDispatch: Dispatch<AppDataActionType>
 }>({
     appDataState: {
-        collections: [],
         currentCollection: {
             collectionName: "",
             _collectionId: ""
