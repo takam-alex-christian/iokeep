@@ -99,7 +99,7 @@ function CreateANoteViewIfEmpty() {
       <Heading label='This Collection is Empty' />
 
       <div className='flex flex-col gap-4 justify-center items-center'>
-        <p className={`${appUiState.uiMode == "light"? "text-zinc-600" : "text-zinc-500"}`} >You have no collectible notes in this collection. <br />Why don't you start by adding one 😉.</p>
+        <p className={`${appUiState.uiMode == "light"? "text-zinc-600" : "text-zinc-500"}`} >You have no collectible notes in this collection. <br />Why don&apos;t you start by adding one 😉.</p>
         <button
           onClick={() => { appUiDispatch({ type: "show_modal", payload: { view: "add_note" } }) }}
           className="w-fit bg-stone-100 rounded-2xl">
