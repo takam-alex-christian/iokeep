@@ -36,7 +36,7 @@ export default function NotesView() {
   }, [collectionsData])
 
   return (
-    <div className=' relative flex flex-col gap-4 '>
+    <div className=' h-[calc(100vh-132px)] relative flex flex-col gap-4 '>
 
       {isCollectionsDataLoading == false &&
         <>
@@ -95,7 +95,7 @@ function CreateANoteViewIfEmpty() {
   const { appUiDispatch } = useContext(appUiContext)
 
   return (
-    <div className='text-center flex flex-col gap-2'>
+    <div className='text-center h-full bg-neutral-50 flex flex-col items-center justify-center gap-2 rounded-3xl '>
       <Heading label='This Collection is Empty' />
 
       <div className='flex flex-col gap-4 justify-center items-center'>
