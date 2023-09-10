@@ -1,14 +1,19 @@
 "use client"
 
 import { NoteDataType } from '@/libs/Types'
-import React, { useState } from 'react'
+import React, { useState, useContext} from 'react'
 
+
+import { appUiContext } from '@/libs/contexts'
 
 type NoteProps = {
     noteData: NoteDataType
 }
 
 export default function Note(props: NoteProps) {
+
+    //
+    const {appUiState} = useContext(appUiContext)
 
     const daysOfTheWeek = [
         "Sunday",
@@ -39,18 +44,17 @@ export default function Note(props: NoteProps) {
     const DateString = `${daysOfTheWeek[noteDate.getDay()]}, ${monthsOfTheYear[noteDate.getMonth()]} ${noteDate.getDate()}, ${noteDate.getFullYear()}`
 
     return (
-        <article className=' rounded-2xl bg-light-gray'>
+        <article className={' rounded-2xl ' + `${appUiState.uiMode== 'light' ? "bg-light-gray" : "bg-zinc-800"}`}>
 
             <div className='flex flex-col p-5 gap-3 justify-between h-full'>{/* Note container*/}
-                <div className='flex flex-col gap-3'>
-                    <h3 className='font-medium text-lg text-dark overflow-hidden text-ellipsis'>{props.noteData.title}</h3>
-
-                    <p className='font-light text-base text-gray overflow-hidden text-ellipsis'>{props.noteData.body}</p>
+                <div className='flex flex-col gap-3 overflow-hidden text-ellipsis'>
+                    <h3 className={'font-medium text-lg  overflow-hidden text-ellipsis ' +`${ appUiState.uiMode == "light"? "text-stone-600": "text-zinc-500"}`}>{props.noteData.title}</h3>
+                    <p className={'font-normal text-base  overflow-hidden text-ellipsis ' + `${appUiState.uiMode == "light"? "text-stone-400": "text-zinc-600"}`}>{props.noteData.body}</p>
                 </div>
 
                 {/* note footer */}
                 <div className={""} role='footer'>
-                    <small className='font-light text-sm text-gray'>{DateString}</small>
+                    <small className={'font-normal text-sm text-gray ' +  `${appUiState.uiMode == "light"? "text-stone-400": "text-zinc-600"}`}>{DateString}</small>
                 </div>
             </div>
 
