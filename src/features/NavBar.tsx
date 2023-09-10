@@ -8,7 +8,7 @@ import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 
 import SearchBar from "@/components/searchBar"
 import IconButton from "@/components/iconButton"
-import IokeepIcon from "@/components/IokeepIcon"
+import IokeepLogo from "@/components/IokeepLogo"
 
 import {Moon as DarkThemeIcon, Profile as ProfileIcon, Icon } from "iconsax-react"
 
@@ -37,21 +37,17 @@ export default function NavBar() {
     }
 
     return (
-        <nav className={` grid grid-cols-nav-lg w-full items-center gap-4 py-4 px-16 h-fit shadow-md ${appUiState.uiMode == "light" ? "bg-stone-50" : "bg-stone-900"}`}>
+        <nav className={` grid grid-cols-nav-lg w-full items-center gap-4 py-4 px-16 h-fit shadow-md ${appUiState.uiMode == "light" ? "bg-stone-50" : "bg-zinc-800"}`}>
             <div className="flex flex-row gap-2 items-center">
-                <IokeepIcon />
+                <IokeepLogo />
                 <div className="flex justify-center items-center w-6 h-6 bg-green-300 text-green-700 text-sm font-semibold rounded-full">v1</div>
             </div>
 
             <SearchBar />
 
-            <div className="flex flex-row justify-end    gap-4">
-                {/* change theme */}
-                {/* <button><DarkThemeIcon color="#000" size={24} /></button> */}
+            <div className="flex flex-row justify-end gap-4">
 
-                {/* <button><ProfileIcon color="#000" size={24} /></button> */}
-
-                <IconButton onClick={uiModeChangeHandler}><DarkThemeIcon size={24} /></IconButton>
+                <IconButton onClick={uiModeChangeHandler}><DarkThemeIcon size={24} color={`${appUiState.uiMode == "light"? "#474E41" : "#959E99"}`} /></IconButton>
 
                 <IconButton onClick={loggoutButtonHandler}><FontAwesomeIcon icon={faArrowRightFromBracket} /></IconButton>
 
