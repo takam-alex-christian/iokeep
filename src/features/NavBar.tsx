@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation"
 import { useEffect, useContext, useReducer, useState, useRef } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 
 import SearchBar from "@/components/searchBar"
 import IconButton from "@/components/iconButton"
+import IokeepIcon from "@/components/IokeepIcon"
 
-import { Notepad2 as IokeepIcon, Moon as DarkThemeIcon, Profile as ProfileIcon, Icon } from "iconsax-react"
+import {Moon as DarkThemeIcon, Profile as ProfileIcon, Icon } from "iconsax-react"
 
 import { appUiContext } from "@/libs/contexts"
 import { signOut } from "@/libs/auth"
@@ -17,27 +18,30 @@ import { signOut } from "@/libs/auth"
 
 export default function NavBar() {
 
-    const {push} = useRouter()
+    const { push } = useRouter()
     const { appUiState, appUiDispatch } = useContext(appUiContext);
 
     function uiModeChangeHandler() {
         appUiDispatch({ type: "switched_ui_mode" })
     }
 
-    function loggoutButtonHandler(){
+    function loggoutButtonHandler() {
 
-        signOut().then((signoutResponse)=>{
+        signOut().then((signoutResponse) => {
             console.log(signoutResponse);
             push("/")
-            
+
         })
 
-        
+
     }
 
     return (
         <nav className={` grid grid-cols-nav-lg w-full items-center gap-4 py-4 px-16 h-fit shadow-md ${appUiState.uiMode == "light" ? "bg-stone-50" : "bg-stone-900"}`}>
-            <div className="flex flex-row gap-4 pl-4"><IokeepIcon color="#000" /><h3 className="text-lg font-semibold">Iokeep</h3></div>
+            <div className="flex flex-row gap-2 items-center">
+                <IokeepIcon />
+                <div className="flex justify-center items-center w-6 h-6 bg-green-300 text-green-700 text-sm font-semibold rounded-full">v1</div>
+            </div>
 
             <SearchBar />
 
