@@ -33,7 +33,7 @@ export default function InputField(props: {
             <input ref={fieldRef} type={isContentVisible ? "text" : "password"} value={props.value} onChange={props.onChangeHandler} placeholder={props.placeholder} className={"w-full p-4 text-base font-semibold focus:outline-none" + " " + props.className} />
             <div className="absolute flex h-full justify-center items-center z-10 px-2 right-2 top-0 bg-white">
                 {
-                    typeof(props.type) != "undefined" && props.type == "password" && <button
+                    typeof(props.type) != "undefined" && props.type == "password" && <button type={"button"}
                         className="focus:outline-none"
                         onClick={hideShowButtonHandler}><FontAwesomeIcon className="text-neutral-700" icon={isContentVisible ? faEyeSlash : faEye} />
                     </button>
