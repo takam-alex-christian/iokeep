@@ -24,11 +24,11 @@ export function middleware(request: NextRequest) {
     })
 
     if(hasValidAuthToken == false) return NextResponse.redirect(new URL("/auth", request.url))
-    else if(hasValidAuthToken == true) return NextResponse.redirect(new URL("/app", request.url))
+    // else if(hasValidAuthToken == true) return NextResponse.redirect(new URL("/app", request.url))
     else return NextResponse.next()
 }
  
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/app:path*', "/"],
+  matcher: ['/app:path*'],
 }
