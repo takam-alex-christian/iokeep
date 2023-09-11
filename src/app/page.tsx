@@ -40,7 +40,7 @@ export default function Home() {
           <div className="flex flex-col gap-6 justify-center items-center text-center">
             <h1 className="w-4/5 text-3xl md:text-5xl font-black text-neutral-900">Personalize your Note taking experience with Iokeep</h1>
             {/* Iokeep personalizing the note taking experience. */}
-            <h3 className="w-3/5 text-base md:text-xl font-semibold text-neutral-700">Create and manage notes by collection, across devices.<br /> Try it out. It&apos;s free and will always be</h3>
+            <h3 className="w-3/5 text-xl font-semibold text-neutral-700">Create and manage notes by collection, across devices.<br /> Try it out. It&apos;s free and will always be</h3>
             <div>
               <Link href={{pathname:"auth", query: {selectedForm: "sign_up"}}}>
                 <button className="bg-green-600 py-3 px-6 text-lg font-medium text-neutral-100 rounded-2xl">Start Taking Notes</button>
