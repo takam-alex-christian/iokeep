@@ -44,10 +44,10 @@ interface AuthPageStateType {
 
 export default function Auth() {
     const searchParams = useSearchParams()
-    
+
     const [authPageState, setAuthPageState] = useState<AuthPageStateType>(
         {
-            activeForm: searchParams.get("selectedForm") !== null? searchParams.get("selectedForm") as "sign_in" | "sign_up": "sign_in",
+            activeForm: searchParams.get("selectedForm") !== null ? searchParams.get("selectedForm") as "sign_in" | "sign_up" : "sign_in",
             authenticated: false
         }
     )
@@ -174,7 +174,11 @@ function SignInForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <InputField type="password" placeholder={"Pa***ord"} onChangeHandler={passwordChangeHandler} />
+                <InputField
+                    type="password"
+                    placeholder={"Pa***ord"}
+                    onChangeHandler={passwordChangeHandler}
+                />
 
                 {formValidationState.password.isValid == false && formValidationState.password.errors.length > 0 &&
                     formValidationState.password.errors.map((eachError, index) => {
@@ -342,14 +346,21 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
 
             <form className="flex flex-col gap-4" onSubmit={formSubmitHandler}>
 
-                <InputField placeholder={"Username"} onChangeHandler={usernameChangeHandler} />
+                <InputField
+                    autoComplete="off"
+                    placeholder={"Username"}
+                    onChangeHandler={usernameChangeHandler} />
                 {
                     !formValidationState.username.isValid && formValidationState.username.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
                     })
                 }
 
-                <InputField type="password" placeholder={"Create passwprd"} onChangeHandler={createPasswordChangeHandler} />
+                <InputField
+                    autoComplete="new-password"
+                    type="password"
+                    placeholder={"Create passwprd"}
+                    onChangeHandler={createPasswordChangeHandler} />
                 {
                     !formValidationState.password.isValid && formValidationState.password.errors.map((error, index) => {
                         return <ErrorComponent key={index} label={error} />
@@ -363,9 +374,9 @@ function SignUpForm(props: { authPageState: AuthPageStateType, setAuthPageState:
                     })
                 }
 
-                <PrimaryButton 
-                // disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)}
-                label={"Sign Up"} />
+                <PrimaryButton
+                    // disabled={!(formValidationState.username.isValid && formValidationState.password.isValid && formValidationState.confirmPassword.isValid)}
+                    label={"Sign Up"} />
 
             </form>
 

@@ -30,7 +30,9 @@ export default function NotesView() {
       }
 
       if (collectionsData?.collections.length == 0) {
-        appDataDispatch({ type: "switch_current_collection", payload: { collectionName: "", _collectionId: "" } })
+        if (appDataState.currentCollection.collectionName.length !== 0) {
+          appDataDispatch({ type: "switch_current_collection", payload: { collectionName: "", _collectionId: "" } })
+        }
       }
     }
   }, [collectionsData, appDataDispatch, appDataState, isCollectionsDataLoading])
@@ -72,11 +74,11 @@ function CreateACollectionViewIfEmpty() {
   const { appUiDispatch, appUiState } = useContext(appUiContext)
 
   return (
-    <div className='text-center flex flex-col gap-2'>
+    <div className={'text-center h-full  flex flex-col items-center justify-center gap-2 rounded-3xl ' + `${appUiState.uiMode == "light" ? "bg-zinc-50" : "bg-zinc-800"}`}>
       <Heading label='Oh! You Have No COllection.' />
 
-      <div className={'text-center h-full  flex flex-col items-center justify-center gap-2 rounded-3xl ' + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-800"}`}>
-        <p className={`${appUiState.uiMode == "light"? "text-zinc-600" : "text-zinc-500"}`}>A collection is a folder for collectible notes.<br /> They allow you to organise notes in a relatable fashion 😎</p>
+      <div className={'flex flex-col gap-4 justify-center items-center '}>
+        <p className={`${appUiState.uiMode == "light" ? "text-zinc-600" : "text-zinc-500"}`}>A collection is a folder for collectible notes.<br /> They allow you to organise notes in a relatable fashion 😎</p>
         <button
           onClick={() => { appUiDispatch({ type: "show_modal", payload: { view: "create_collection" } }) }}
           className="w-fit bg-stone-100 rounded-2xl">
@@ -92,19 +94,19 @@ function CreateACollectionViewIfEmpty() {
 }
 
 function CreateANoteViewIfEmpty() {
-  const { appUiDispatch, appUiState} = useContext(appUiContext)
+  const { appUiDispatch, appUiState } = useContext(appUiContext)
 
   return (
-    <div className={'text-center h-full  flex flex-col items-center justify-center gap-2 rounded-3xl ' + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-800"}`}>
+    <div className={'text-center h-full  flex flex-col items-center justify-center gap-2 rounded-3xl ' + `${appUiState.uiMode == "light" ? "bg-zinc-50" : "bg-zinc-800"}`}>
       <Heading label='This Collection is Empty' />
 
       <div className='flex flex-col gap-4 justify-center items-center'>
-        <p className={`${appUiState.uiMode == "light"? "text-zinc-600" : "text-zinc-500"}`} >You have no collectible notes in this collection. <br />Why don&apos;t you start by adding one 😉.</p>
+        <p className={`${appUiState.uiMode == "light" ? "text-zinc-600" : "text-zinc-500"}`} >You have no collectible notes in this collection. <br />Why don&apos;t you start by adding one 😉.</p>
         <button
           onClick={() => { appUiDispatch({ type: "show_modal", payload: { view: "add_note" } }) }}
           className="w-fit bg-stone-100 rounded-2xl">
           <div className="flex flex-row gap-4 p-4">
-            <AdditemIcon size={24} color="#000" /> 
+            <AdditemIcon size={24} color="#000" />
             <span>Add a note to this collection</span>
           </div>
 
@@ -147,12 +149,12 @@ function CurrentCollectionName() {
 
   const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections()
 
-  const {appUiState} = useContext(appUiContext)
+  const { appUiState } = useContext(appUiContext)
   const { appDataState } = useContext(appDataContext)
 
   if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
   else return (
-    <h2 className={'text-3xl font-normal p-4 ' + `${appUiState.uiMode == "light"? "text-zinc-800" : "text-zinc-500"}`}>{appDataState.currentCollection.collectionName}</h2>
+    <h2 className={'text-3xl font-normal p-4 ' + `${appUiState.uiMode == "light" ? "text-zinc-800" : "text-zinc-500"}`}>{appDataState.currentCollection.collectionName}</h2>
   )
 
 }

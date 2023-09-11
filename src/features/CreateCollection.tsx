@@ -66,11 +66,14 @@ export default function CreateCollection() {
         e.preventDefault();
 
         setCollectionsData({ ...collectionsData, collections: [...(collectionsData ? collectionsData?.collections.slice(0) : []), { collectionName: formState.collectionName, _collectionId: "" }] })
-        mutate("/collections")
+
 
         postCollectionToBackend({
             collectionName: formState.collectionName,
             _collectionId: ""
+        }).then((result) => {
+            console.log(result)
+            mutate("/collections")
         })
 
         appUiDispatch({ type: "hide_modal" });
@@ -92,14 +95,14 @@ export default function CreateCollection() {
                 <div className="flex flex-col gap-4">
                     <div
                         className={" rounded-2xl overflow-hidden outline outline-1  " + `${appUiState.uiMode == "light" ? "outline-zinc-300  focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl"}`}>
-                        
-                        <input 
-                        ref={collectionNameRef} 
-                        type="text" 
-                        onChange={collectionNameChangeHandler} 
-                        value={formState.collectionName} 
-                        placeholder="Collection Name" 
-                        className={"w-full p-4 text-base font-semibold focus:outline-none bg-transparent " + `${appUiState.uiMode == "light"? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
+
+                        <input
+                            ref={collectionNameRef}
+                            type="text"
+                            onChange={collectionNameChangeHandler}
+                            value={formState.collectionName}
+                            placeholder="Collection Name"
+                            className={"w-full p-4 text-base font-semibold focus:outline-none bg-transparent " + `${appUiState.uiMode == "light" ? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
                     </div>
 
                     {formValidation.isCollectionNameValid == false && formValidation.showError && formValidation.errors.map((eachError, index) => {

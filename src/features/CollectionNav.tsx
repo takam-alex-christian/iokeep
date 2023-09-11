@@ -48,7 +48,7 @@ export default function CollectionNav() {
 
                 {
                     collectionsData?.collections.length == 0 &&
-                    <div className={"px-4 text-base font-semibold " + `${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zing-600"}`}>
+                    <div className={"px-4 text-base font-semibold " + `${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-600"}`}>
                         No collection
                     </div>
                 }
