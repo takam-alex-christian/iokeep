@@ -6,11 +6,11 @@ const nextConfig = {
     async rewrites(){
         return [
             {
-                source: '/auth/signin/:path*',
+                source: '/backend/auth/signin/:path*',
                 destination: `${API_URL}/auth/signin/:path*`
             },
             {
-                source: '/auth/signup/:path*',
+                source: '/backend/auth/signup/:path*',
                 destination: `${API_URL}/auth/signup/:path*`
             },
             {
