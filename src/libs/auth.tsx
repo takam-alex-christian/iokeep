@@ -22,7 +22,7 @@ async function signUp(props: {
     username: string,
     password: string
 }){
-    let response = fetch("/auth/signup", 
+    let response = fetch("/backend/auth/signup", 
     {
         method: "POST",
         headers: {
@@ -38,7 +38,7 @@ async function signIn(props: {
     username: string,
     password: string
 }){
-    let response = fetch("/auth/signin",{
+    let response = fetch("/backend/auth/signin",{
         method: "POST",
         headers: {
             "Content-Type": "application/json"
