@@ -65,7 +65,7 @@ function SignUpForm() {
             case "start_loading": return { ...prevState, isLoading: true }
             case "stop_loading": return { ...prevState, isLoading: false }
 
-            case "update_error": return { ...prevState, error: action.payload.value, showError: true }
+            case "update_error": return { ...prevState, error: action.payload.value, showError: true, isLoading: false }
 
             case "show_error": return { ...prevState, showError: true }
             case "hide_error": return { ...prevState, showError: false }

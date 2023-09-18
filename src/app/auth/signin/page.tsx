@@ -63,7 +63,7 @@ function SignInForm() {
             case "update_username": return { ...prevState, usernameValue: action.payload.value };
             case "update_password": return { ...prevState, passwordValue: action.payload.value };
 
-            case "update_error": return { ...prevState, error: action.payload.value, showError: true };
+            case "update_error": return { ...prevState, error: action.payload.value, showError: true, isLoading: false };
 
             case "start_loading": return { ...prevState, isLoading: true };
             case "stop_loading": return { ...prevState, isLoading: false };
