@@ -22,12 +22,12 @@ export default function Home() {
 
         <div className="flex flex-row gap-4">
           <div>
-            <Link href={{pathname: "/auth", query: {selectedForm: "sign_up"}}}>
+            <Link href={"auth/signup"}>
               <button className="bg-neutral-100 text-neutral-600 py-2 px-3 rounded-2xl">Sign Up</button>
             </Link>
           </div>
           <div>
-            <Link href={{pathname: "/auth", query: {selectedForm: "sign_in"}}}>
+            <Link href={"auth/signin"}>
               <button className="bg-green-600 text-neutral-100 py-2 px-3 rounded-2xl" >Sign in</button>
             </Link>
           </div>
@@ -42,7 +42,7 @@ export default function Home() {
             {/* Iokeep personalizing the note taking experience. */}
             <h3 className="w-3/5 text-xl font-semibold text-neutral-700">Create and manage notes by collection, across devices.<br /> Try it out. It&apos;s free and will always be</h3>
             <div>
-              <Link href={{pathname:"auth", query: {selectedForm: "sign_up"}}}>
+              <Link href={"auth/signup"}>
                 <button className="bg-green-600 py-3 px-6 text-lg font-medium text-neutral-100 rounded-2xl">Start Taking Notes</button>
               </Link>
             </div>
