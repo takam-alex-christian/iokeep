@@ -9,6 +9,7 @@ import { useCollections, useUser } from "@/libs/getDataFromBackend"
 
 import type { CollectionDataType } from "@/libs/Types"
 import BlockLoadingPlaceholder from "@/components/BlockLoadingPlaceholder"
+import Col from "@/layouts/Col"
 
 
 export default function CollectionNav() {
@@ -66,9 +67,9 @@ export default function CollectionNav() {
                 <div className="flex flex-col gap-2">
                     <button
                         onClick={createCollectionButtonHandler}
-                        className={"w-fit  rounded-2xl " + `${appUiState.uiMode == "light"? "bg-stone-100 text-zinc-700" : "bg-zinc-700 text-zinc-400"}`}>
+                        className={"w-fit  rounded-2xl " + `${appUiState.uiMode == "light" ? "bg-stone-100 text-zinc-700" : "bg-zinc-700 text-zinc-400"}`}>
                         <div className="flex flex-row gap-4 p-4">
-                            <AdditemIcon size={24} color={`${appUiState.uiMode == "light"? "#474E41" : "#959E99"}`} />
+                            <AdditemIcon size={24} color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
                             <span>New collection</span>
                         </div>
 
@@ -107,27 +108,27 @@ function CollectionList(props: {}) {
     if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
     else
         return (
-            <div className="flex flex-col gap-2">
+            <Col>
 
                 {collectionsData?.collections.map((eachCollection, index) => {
-                    return (<CollectionButton label={eachCollection.collectionName} onClick={() => { switchCollectionButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }} key={index} />)
+                    return (<CollectionButton label={eachCollection.collectionName} _collectionId={eachCollection._collectionId} onClick={() => { switchCollectionButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }} key={index} />)
                 })}
-
-
-            </div>
+            </Col>
         )
 
 }
 
 function CollectionButton(props: {
     label?: string,
+    _collectionId?: string
     onClick?: () => void
 }) {
 
     const { appUiState } = useContext(appUiContext)
+    const { appDataState } = useContext(appDataContext)
 
     return (
-        <button onClick={props.onClick} className="flex flex-row justify-start items-center py-2 px-4 gap-4 ">
+        <button onClick={props.onClick} className={`flex flex-row justify-start items-center rounded-2xl py-3 px-4 gap-4 ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-stone-800" : "bg-zinc-300"}` : ""}`}>
             {/* <NoteIcon size="24" color="#000"/> */}
             <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
             <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
