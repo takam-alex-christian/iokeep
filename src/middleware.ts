@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
       }
     })
 
-    if(hasValidAuthToken == false) return NextResponse.redirect(new URL("/auth", request.url))
+    if(hasValidAuthToken == false) return NextResponse.redirect(new URL("/auth/signin", request.url))
     // else if(hasValidAuthToken == true) return NextResponse.redirect(new URL("/app", request.url))
     else return NextResponse.next()
 }
