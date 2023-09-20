@@ -65,15 +65,14 @@ export default function CreateCollection() {
 
         e.preventDefault();
 
-        setCollectionsData({ ...collectionsData, collections: [...(collectionsData ? collectionsData?.collections.slice(0) : []), { collectionName: formState.collectionName, _collectionId: "" }] })
-
+        setCollectionsData({ ...collectionsData, collections: [...(collectionsData ? collectionsData.collections.slice(0) : []), { collectionName: formState.collectionName, _collectionId: "" }] })
 
         postCollectionToBackend({
             collectionName: formState.collectionName,
             _collectionId: ""
         }).then((result) => {
             console.log(result)
-            mutate("/collections")
+            // mutate("/collections")
         })
 
         appUiDispatch({ type: "hide_modal" });
