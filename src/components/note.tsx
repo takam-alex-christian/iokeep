@@ -4,7 +4,7 @@ import { NoteDataType } from '@/libs/Types'
 import React, { useState, useContext } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis, faPencil} from '@fortawesome/free-solid-svg-icons'
+import { faEllipsis, faPencil } from '@fortawesome/free-solid-svg-icons'
 
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
@@ -90,22 +90,25 @@ function DottedMenu() {
 
 
     const MenuButton = (props: { children: React.ReactNode | React.ReactNode[], clickHandler: React.MouseEventHandler<HTMLButtonElement> }): React.ReactElement => (
-        <button type="button" onClick={props.clickHandler}><div className='flex flex-row gap-2 items-center text-base'>{props.children}</div></button>
+        <button
+            type="button"
+            onClick={props.clickHandler}
+            className={`${appUiState.uiMode == "dark" ? "hover:bg-zinc-600" : "hover:bg-zinc-200"}`}><div className='flex flex-row gap-4 items-center text-base px-4 py-1 bg-transparent'>{props.children}</div></button>
     )
 
 
-    function revealMenuContent(){
+    function revealMenuContent() {
         setRevealContent(true);
     }
 
     return (
         <div className={`absolute top-2 right-2 rounded-full w-8 h-8 ` + `${appUiState.uiMode == "light" ? "text-stone-600" : "text-zinc-500"}`} >
-            <button className='flex justify-center items-center w-full h-full rounded-full' onClick={revealMenuContent}>
+            <button className='flex justify-center items-center w-full h-full rounded-full ' onClick={revealMenuContent}>
                 <FontAwesomeIcon icon={faEllipsis} />
             </button>
 
             {isContentRevealed &&
-                <div className='absolute right-2 bg- min-w-fit flex flex-col justify-end '>
+                <div className={`absolute right-2 min-w-fit flex flex-col justify-end rounded-lg overflow-hidden ${appUiState.uiMode == "dark" ? "bg-zinc-700" : "bg-zinc-50"} shadow-md`}>
                     <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton>
                     <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
                 </div>
