@@ -4,7 +4,9 @@ import { NoteDataType } from '@/libs/Types'
 import React, { useState, useContext } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsis, faPencil} from '@fortawesome/free-solid-svg-icons'
+
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
 
 import { appUiContext } from '@/libs/contexts'
@@ -82,13 +84,41 @@ export default function Note(props: NoteProps) {
 
 function DottedMenu() {
 
-    const {appUiState} = useContext(appUiContext)
+    const { appUiState } = useContext(appUiContext)
+
+    const [isContentRevealed, setRevealContent] = useState(false);
+
+
+    const MenuButton = (props: { children: React.ReactNode | React.ReactNode[], clickHandler: React.MouseEventHandler<HTMLButtonElement> }): React.ReactElement => (
+        <button type="button" onClick={props.clickHandler}><div className='flex flex-row gap-2 items-center text-base'>{props.children}</div></button>
+    )
+
+
+    function revealMenuContent(){
+        setRevealContent(true);
+    }
 
     return (
         <div className={`absolute top-2 right-2 rounded-full w-8 h-8 ` + `${appUiState.uiMode == "light" ? "text-stone-600" : "text-zinc-500"}`} >
-            <button className='flex justify-center items-center w-full h-full rounded-full'>
+            <button className='flex justify-center items-center w-full h-full rounded-full' onClick={revealMenuContent}>
                 <FontAwesomeIcon icon={faEllipsis} />
             </button>
+
+            {isContentRevealed &&
+                <div className='absolute right-2 bg- min-w-fit flex flex-col justify-end '>
+                    <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton>
+                    <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
+                </div>
+            }
         </div>
     )
 }
+
+// function DottedMenuContent(){
+
+
+//     return (
+//     <div>
+
+//     </div>)
+// }
