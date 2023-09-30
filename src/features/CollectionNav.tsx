@@ -128,7 +128,7 @@ function CollectionButton(props: {
     const { appDataState } = useContext(appDataContext)
 
     return (
-        <button onClick={props.onClick} className={`flex flex-row justify-start items-center rounded-2xl py-3 px-4 gap-4 hover:${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
+        <button onClick={props.onClick} className={`flex flex-row justify-start items-center rounded-2xl py-3 px-4 gap-4 ${appUiState.uiMode == "dark" ? "hover:bg-zinc-800" : "hover:bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
             {/* <NoteIcon size="24" color="#000"/> */}
             <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
             <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
