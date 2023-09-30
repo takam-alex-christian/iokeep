@@ -1,6 +1,11 @@
 "use client"
 
 import { NoteDataType } from '@/libs/Types'
+import { appUiContext } from '@/libs/contexts'
+import { backendDeleteRequest } from '@/libs/noteUtilities'
+
+import { useNotes } from '@/libs/getDataFromBackend'
+
 import React, { useState, useContext } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,7 +14,6 @@ import { faEllipsis, faPencil } from '@fortawesome/free-solid-svg-icons'
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
 
-import { appUiContext } from '@/libs/contexts'
 
 type NoteProps = {
     noteData: NoteDataType
@@ -65,7 +69,7 @@ export default function Note(props: NoteProps) {
             onMouseLeave={mouseLeaveHandler}
             className={' relative rounded-2xl ' + `${appUiState.uiMode == 'light' ? "bg-zinc-100" : "bg-zinc-800"}`}>
 
-            {dottedMenuVisibility && <DottedMenu />}
+            {dottedMenuVisibility && <DottedMenu noteId={props.noteData._id} />}
 
             <div className='flex flex-col p-5 gap-3 justify-between h-full'>{/* Note container*/}
                 <div className='flex flex-col gap-3 overflow-hidden text-ellipsis'>
@@ -82,12 +86,12 @@ export default function Note(props: NoteProps) {
     )
 }
 
-function DottedMenu() {
+function DottedMenu(props: { noteId: string }) {
+    const { setNotesData } = useNotes()
 
     const { appUiState } = useContext(appUiContext)
 
     const [isContentRevealed, setRevealContent] = useState(false);
-
 
     const MenuButton = (props: { children: React.ReactNode | React.ReactNode[], clickHandler: React.MouseEventHandler<HTMLButtonElement> }): React.ReactElement => (
         <button
@@ -96,6 +100,21 @@ function DottedMenu() {
             className={`${appUiState.uiMode == "dark" ? "hover:bg-zinc-600" : "hover:bg-zinc-200"}`}><div className='flex flex-row gap-4 items-center text-base px-4 py-1 bg-transparent'>{props.children}</div></button>
     )
 
+    function deleteButtonHandler(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+
+        let { deleted, message } = backendDeleteRequest(props.noteId)
+
+        if (deleted) {
+            //we remove corresponding note from tree
+            console.log("note deleted peacefully");
+            //mutate notes data corresponding to this collection
+            setNotesData();
+
+        } else {
+            console.log(message);
+        }
+    }
 
     function revealMenuContent() {
         setRevealContent(true);
@@ -109,19 +128,10 @@ function DottedMenu() {
 
             {isContentRevealed &&
                 <div className={`absolute right-2 min-w-fit flex flex-col justify-end rounded-lg overflow-hidden ${appUiState.uiMode == "dark" ? "bg-zinc-700" : "bg-zinc-50"} shadow-md`}>
-                    <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton>
-                    <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
+                    {/* <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton> */}
+                    <MenuButton clickHandler={deleteButtonHandler} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
                 </div>
             }
         </div>
     )
 }
-
-// function DottedMenuContent(){
-
-
-//     return (
-//     <div>
-
-//     </div>)
-// }
