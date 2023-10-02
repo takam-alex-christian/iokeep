@@ -1,3 +1,4 @@
+"use client"
 //react specific libs
 import { useContext } from "react"
 
