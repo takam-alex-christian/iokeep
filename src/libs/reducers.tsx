@@ -10,8 +10,6 @@ export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType)
         }
         case "switched_ui_mode": {
             let newState: AppUiStateType = { ...prevState, uiMode: prevState.uiMode == "light" ? "dark" : "light" };
-            localStorage.setItem("app_ui_state", JSON.stringify(newState));
-
             return newState;
         } case "show_modal": {
             return { ...prevState, modalOverlay: true, currentModalView: action.payload.view }
