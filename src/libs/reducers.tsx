@@ -1,5 +1,6 @@
-import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType, CollectionDataType } from "./Types";
+"use client"
 
+import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType, CollectionDataType } from "./Types";
 
 export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType): AppUiStateType {
 
