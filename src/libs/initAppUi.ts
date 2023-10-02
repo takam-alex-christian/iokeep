@@ -5,7 +5,7 @@ import { useContext } from "react"
 import { appUiContext } from "./contexts"
 
 
-function initAppUiState(): null { //should be called on every page
+function InitAppUiState(): null { //should be called on every page
     const { appUiDispatch } = useContext(appUiContext)
 
     if (localStorage.getItem("app_ui_state") !== null) {
@@ -15,4 +15,4 @@ function initAppUiState(): null { //should be called on every page
     return null
 }
 
-export { initAppUiState }
+export { InitAppUiState }

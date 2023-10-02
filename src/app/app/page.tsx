@@ -34,7 +34,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import AddButtonGroup from "@/components/AddButtonGroup"
 import FloatingPlusButton from "@/features/FloatingPlusButton"
-import { initAppUiState } from "@/libs/initAppUi"
+import { InitAppUiState } from "@/libs/initAppUi"
 config.autoAddCss = false
 
 
@@ -50,9 +50,7 @@ export default function App() {
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
 
         
-        {/* we initialize the appUi */
-          initAppUiState()
-        }
+        <InitAppUiState />
 
 
         <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light" ? "bg-zinc-200" : "bg-zinc-900"}`}>
