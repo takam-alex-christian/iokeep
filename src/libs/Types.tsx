@@ -8,7 +8,7 @@ export type NoteDataType = {
     title: string,
     body: string,
     tags: string[],
-    
+
     creationDate: Date | string,
     lastModified: Date | string
 }
@@ -44,7 +44,9 @@ export type AppUiStateType = {
     currentModalView?: "create_collection" | "add_note" | null
 }
 
-export type AppUiActionType = { type: "switched_ui_mode" }
+export type AppUiActionType =
+    {type: "initilize_app_ui", payload: {appUiState: AppUiStateType}}
+    | { type: "switched_ui_mode" }
     | {
         type: "show_modal", payload: {
             view: "create_collection" | "add_note"

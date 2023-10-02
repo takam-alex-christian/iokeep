@@ -22,7 +22,8 @@ export default function NavBar() {
     const { appUiState, appUiDispatch } = useContext(appUiContext);
 
     function uiModeChangeHandler() {
-        appUiDispatch({ type: "switched_ui_mode" })
+        appUiDispatch({ type: "switched_ui_mode" });
+        
     }
 
     function loggoutButtonHandler() {
