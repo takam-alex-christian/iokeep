@@ -4,6 +4,9 @@ import { AppUiStateType, AppUiActionType, AppDataStateType, AppDataActionType, C
 export function appUiReducer(prevState: AppUiStateType, action: AppUiActionType): AppUiStateType{
 
     switch(action.type){
+        case "initial_ui_mode": {
+            return {...prevState, uiMode: action.payload.mode}
+        }
         case "switched_ui_mode": {
            return  {...prevState, uiMode: prevState.uiMode == "light" ? "dark" : "light" };
         }case "show_modal": {
