@@ -34,21 +34,28 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import AddButtonGroup from "@/components/AddButtonGroup"
 import FloatingPlusButton from "@/features/FloatingPlusButton"
+import { initAppUiState } from "@/libs/initAppUi"
 config.autoAddCss = false
 
 
 export default function App() {
 
-  
+
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, {currentCollection: {collectionName: "", _collectionId: ""} });
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { currentCollection: { collectionName: "", _collectionId: "" } });
 
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
       <appDataContext.Provider value={{ appDataState, appDataDispatch }} >
-        <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light"? "bg-zinc-200" : "bg-zinc-900"}` }>
 
+        
+        {/* we initialize the appUi */
+          initAppUiState()
+        }
+
+
+        <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light" ? "bg-zinc-200" : "bg-zinc-900"}`}>
           <FloatingPlusButton />
 
           <NavBar />
@@ -73,4 +80,3 @@ export default function App() {
     </appUiContext.Provider>
   )
 }
-

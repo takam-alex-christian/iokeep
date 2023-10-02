@@ -45,7 +45,7 @@ export type AppUiStateType = {
 }
 
 export type AppUiActionType =
-    {type: "initial_ui_mode", payload: {mode: "light" | "dark"}}
+    {type: "initilize_app_ui", payload: {appUiState: AppUiStateType}}
     | { type: "switched_ui_mode" }
     | {
         type: "show_modal", payload: {

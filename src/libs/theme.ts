@@ -1,4 +1,5 @@
 
+
 const lightColorClasses = {
     primary: "emerald-500",
     secondary: "",
@@ -30,11 +31,12 @@ const darkColorClasses = {
 }
 
 // colors are basically tailwindcss classes without prefix (i.e without bg-, text-)
+//usage, place a prefix (i.e bg-, text-) before the actual class like <text-<colors.light.onPromary>>
 const colors = {
     light: lightColorClasses,
     dark: darkColorClasses
 }
 
 export {
-    colors
+    colors,
 }
