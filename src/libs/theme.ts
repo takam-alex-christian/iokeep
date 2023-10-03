@@ -37,6 +37,6 @@ const colors = {
     dark: darkColorClasses
 }
 
-export {
+export default {
     colors,
 }

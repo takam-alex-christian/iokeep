@@ -37,13 +37,18 @@ import FloatingPlusButton from "@/features/FloatingPlusButton"
 import { InitAppUiState } from "@/libs/initAppUi"
 config.autoAddCss = false
 
+//themes
+import themeData from "@/libs/theme"
 
 export default function App() {
+
 
 
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { currentCollection: { collectionName: "", _collectionId: "" } });
+
+  const theme = {colors: appUiState.uiMode == "dark"? themeData.colors.dark : themeData.colors.light }
 
   return (
     <appUiContext.Provider value={{ appUiState, appUiDispatch }}>
@@ -53,7 +58,7 @@ export default function App() {
         <InitAppUiState />
 
 
-        <main className={'min-h-screen flex flex-col gap-8 ' + `${appUiState.uiMode == "light" ? "bg-zinc-200" : "bg-zinc-900"}`}>
+        <main className={'min-h-screen flex flex-col gap-8 ' + `bg-${theme.colors.background}"}`}>
           <FloatingPlusButton />
 
           <NavBar />
