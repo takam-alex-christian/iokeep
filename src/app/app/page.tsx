@@ -42,8 +42,6 @@ import themeData from "@/libs/theme"
 
 export default function App() {
 
-
-
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
   const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { currentCollection: { collectionName: "", _collectionId: "" } });
@@ -58,7 +56,7 @@ export default function App() {
         <InitAppUiState />
 
 
-        <main className={'min-h-screen flex flex-col gap-8 ' + `bg-${theme.colors.background}"}`}>
+        <main className={'min-h-screen flex flex-col gap-8 ' + ` bg-${theme.colors.background}`}>
           <FloatingPlusButton />
 
           <NavBar />
