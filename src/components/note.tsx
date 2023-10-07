@@ -2,16 +2,18 @@
 
 import { NoteDataType } from '@/libs/Types'
 import { appUiContext } from '@/libs/contexts'
-import { backendDeleteRequest } from '@/libs/noteUtilities'
+import { backendDeleteRequest, updateNoteToBackend } from '@/libs/noteUtilities'
 
 import { useNotes } from '@/libs/getDataFromBackend'
 
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, createContext, Dispatch, SetStateAction } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis, faPencil } from '@fortawesome/free-solid-svg-icons'
 
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import ModalOverlay from './modaOverlay'
+import AddNote from '@/features/AddNote'
 
 
 
@@ -19,12 +21,14 @@ type NoteProps = {
     noteData: NoteDataType
 }
 
+
 export default function Note(props: NoteProps) {
 
     //
     const { appUiState } = useContext(appUiContext)
 
     const [dottedMenuVisibility, setDottedMenuVisibility] = useState(false)
+    const [noteEditState, setNoteEditState] = useState(false) //show modal overlay when true
 
     const daysOfTheWeek = [
         "Sunday",
@@ -69,7 +73,7 @@ export default function Note(props: NoteProps) {
             onMouseLeave={mouseLeaveHandler}
             className={' relative rounded-2xl ' + `${appUiState.uiMode == 'light' ? "bg-zinc-100" : "bg-zinc-800"}`}>
 
-            {dottedMenuVisibility && <DottedMenu noteId={props.noteData._id} />}
+            {dottedMenuVisibility && <DottedMenu noteEditStateSetter={setNoteEditState} noteId={props.noteData._id} />}
 
             <div className='flex flex-col p-5 gap-3 justify-between h-full'>{/* Note container*/}
                 <div className='flex flex-col gap-3 overflow-hidden text-ellipsis'>
@@ -82,11 +86,18 @@ export default function Note(props: NoteProps) {
                     <small className={'font-normal text-sm text-gray ' + `${appUiState.uiMode == "light" ? "text-stone-400" : "text-zinc-600"}`}>{DateString}</small>
                 </div>
             </div>
+
+            {
+                noteEditState && <ModalOverlay>
+                    <AddNote edit={true} noteData={props.noteData} />
+                </ModalOverlay>
+            }
+
         </article>
     )
 }
 
-function DottedMenu(props: { noteId: string }) {
+function DottedMenu(props: { noteId: string, noteEditStateSetter: React.Dispatch<React.SetStateAction<boolean>>}) {
     const { setNotesData } = useNotes()
 
     const { appUiState } = useContext(appUiContext)
@@ -116,6 +127,13 @@ function DottedMenu(props: { noteId: string }) {
         }
     }
 
+    function editButtonHandler(e: React.MouseEvent<HTMLButtonElement>) {
+        //this button handler is meant for the edit note logic
+        e.preventDefault();
+        
+        props.noteEditStateSetter(true); // displayes the modal
+    }
+
     function revealMenuContent() {
         setRevealContent(true);
     }
@@ -128,7 +146,7 @@ function DottedMenu(props: { noteId: string }) {
 
             {isContentRevealed &&
                 <div className={`absolute right-2 min-w-fit flex flex-col justify-end rounded-lg overflow-hidden ${appUiState.uiMode == "dark" ? "bg-zinc-700" : "bg-zinc-50"} shadow-md`}>
-                    {/* <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton> */}
+                    <MenuButton clickHandler={editButtonHandler} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton>
                     <MenuButton clickHandler={deleteButtonHandler} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
                 </div>
             }

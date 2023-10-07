@@ -12,21 +12,35 @@ import { useCollections, useNotes } from "@/libs/getDataFromBackend";
 import { postNoteToBackend } from "@/libs/postDataToBackend";
 import ErrorComponent from "@/components/ErrorComponent";
 
+import theme from "@/libs/theme";
+import PrimaryButton from "@/components/PrimaryButton";
+import { updateNoteToBackend } from "@/libs/noteUtilities";
 
-export default function AddNote() {
+export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType }) {
+
+    //we start by checking whether we are editing a note or not
+    const isInEdit = typeof (props.edit) !== "undefined" && typeof (props.noteData) !== "undefined" && props.edit == true;
+
     const { appDataState, appDataDispatch } = useContext(appDataContext);
     const { appUiState, appUiDispatch } = useContext(appUiContext);
 
     const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections();
     const { notesData, isNotesLoading } = useNotes() //we pass the currentCollection Id instead
 
+    //theming
+    const themeData = { colors: appUiState.uiMode == "dark" ? theme.colors.dark : theme.colors.light }
+
     const formRef = useRef<HTMLFormElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
     const bodyRef = useRef<HTMLTextAreaElement>(null);
 
+
+
+    //and we assign note data to state data if it is provided anyways
+
     const [formState, setFormState] = useState({
-        titleValue: "",
-        bodyValue: "",
+        titleValue: isInEdit ? props.noteData?.title! : "",
+        bodyValue: isInEdit ? props.noteData?.body! : "",
 
         focusWithin: false,
         selectedCollection: {
@@ -102,17 +116,28 @@ export default function AddNote() {
 
         e.preventDefault();
 
-        if (formValidationState.isFormDataValid) {//isFormData valid
-            //just for the visual of having something happening right after addition
-            mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`, { ...notesData, notes: [...notesDataCopy, { _id: "", body: formState.bodyValue, title: formState.titleValue, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId, creationDate: "", lastModified: "" } as NoteDataType] })
+        if (formValidationState.isFormDataValid) {
 
-            postNoteToBackend({ _id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: "" }).then((response) => {
-                console.log(response)
-            }).then(() => {
-                mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`)
-            })
 
-            appUiDispatch({ type: "hide_modal" })
+            if (isInEdit) {//we implement here what happen when we submit
+                let {updated, message, isError} = updateNoteToBackend(props.noteData!);
+
+                if(updated == true && isError == false) console.log(message) //
+
+            } else {
+
+                //just for the visual of having something happening right after addition
+                mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`, { ...notesData, notes: [...notesDataCopy, { _id: "", body: formState.bodyValue, title: formState.titleValue, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId, creationDate: "", lastModified: "" } as NoteDataType] })
+
+                postNoteToBackend({ _id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: "" }).then((response) => {
+                    console.log(response)
+                }).then(() => {
+                    mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`)
+                })
+
+                appUiDispatch({ type: "hide_modal" })
+
+            }
         }
 
     }
@@ -138,31 +163,40 @@ export default function AddNote() {
     else return (
 
         <div className={"rounded-3xl max-w-lg w-full p-4 shadow-md " + `${appUiState.uiMode == "light" ? "bg-zinc-100" : "bg-zinc-800"}`}>
-            <div className="text-base  text-neutral-400"> {/* collection selector*/}
-                <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 font-semibold">
-                    <div className="flex flex-row gap-2 items-center">
-                        <span>{formState.selectedCollection.collectionName}</span>
-                        <span><ArrowDownIcon size="16" /></span>
-                    </div>
-                </button>
-                <div className={`relative`}>
-                    {
-                        formState.showCollectionSelectOptions && 
-                        <div 
-                        className={"absolute flex flex-col w-fit items-start shadow-md rounded-lg overflow-hidden " + `${appUiState.uiMode == "light"? "bg-zinc-50" : "bg-zinc-900"}`}>
-                            {collectionsData?.collections.map((eachCollection, index) => {
-                                return (<button key={index}
-                                    onClick={() => { collectionSelectButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }}
-                                    className={"py-1 px-4 bg-transparent font-normal " + `${appUiState.uiMode == "light"? "text-zinc-700" : "text-zinc-500"}`}>{eachCollection.collectionName}</button>)
-                            })}
+
+            {props.edit ?
+
+                //on note edition
+                <div className={`text-lg font-medium p-2 text-${themeData.colors.onSurface} `}>{formState.selectedCollection.collectionName}</div>
+                :
+                // on note creation
+                <div className="text-base  text-neutral-400"> {/* collection selector*/}
+                    <button onClick={toggleCollectionSelectOptionsHandler} className="p-2 font-semibold">
+                        <div className="flex flex-row gap-2 items-center">
+                            <span>{formState.selectedCollection.collectionName}</span>
+                            <span><ArrowDownIcon size="16" /></span>
                         </div>
-                    }
+                    </button>
+                    <div className={`relative`}>
+                        {
+                            formState.showCollectionSelectOptions &&
+                            <div
+                                className={"absolute flex flex-col w-fit items-start shadow-md rounded-lg overflow-hidden " + `${appUiState.uiMode == "light" ? "bg-zinc-50" : "bg-zinc-900"}`}>
+                                {collectionsData?.collections.map((eachCollection, index) => {
+                                    return (<button key={index}
+                                        onClick={() => { collectionSelectButtonHandler({ collectionName: eachCollection.collectionName, _collectionId: eachCollection._collectionId }) }}
+                                        className={"py-1 px-4 bg-transparent font-normal " + `${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{eachCollection.collectionName}</button>)
+                                })}
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            }
+
             <form ref={formRef} action="" onSubmit={submitHandler} onFocus={formFocusWithinHandler}>
 
                 <div className="flex flex-col gap-4">
-                    <div className={"flex flex-col gap-2 rounded-2xl p-2 outline outline-1  " +  `${appUiState.uiMode == "light"? "outline-zinc-300 focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl "}`}>
+                    <div className={"flex flex-col gap-2 rounded-2xl p-2 outline outline-1  " + `${appUiState.uiMode == "light" ? "outline-zinc-300 focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl "}`}>
                         <input
                             ref={titleRef}
                             maxLength={50}
@@ -178,7 +212,7 @@ export default function AddNote() {
                             onChange={bodyChangeHandler}
                             value={formState.bodyValue}
                             spellCheck={false}
-                            className={"focus:outline-none font-normal min-h-[8em] resize-none bg-transparent " + `${appUiState.uiMode == "light"? "text-zinc-700 placeholder:text-zinc-400" : "text-zinc-600 placeholder:text-zinc-700"}`} />
+                            className={"focus:outline-none font-normal min-h-[8em] resize-none bg-transparent " + `${appUiState.uiMode == "light" ? "text-zinc-700 placeholder:text-zinc-400" : "text-zinc-600 placeholder:text-zinc-700"}`} />
                         <div className="text-xs font-normal text-neutral-400">{formState.bodyValue.length + formState.titleValue.length} Characters</div>
                     </div>
 
@@ -191,7 +225,8 @@ export default function AddNote() {
                     }
 
                     <div>
-                        <button className="w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500" disabled={formValidationState.isFormDataValid == false && formValidationState.showError}>Add</button>
+                        {/* <button className="w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500">Add</button> */}
+                        <PrimaryButton>{isInEdit ? "Save Changes" : "Add"}</PrimaryButton>
                     </div>
                 </div>
             </form>
