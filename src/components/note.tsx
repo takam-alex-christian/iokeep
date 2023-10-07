@@ -115,6 +115,12 @@ function DottedMenu(props: { noteId: string }) {
             console.log(message);
         }
     }
+    
+    function editButtonHandler(e: React.MouseEvent<HTMLButtonElement>){
+        //this button handler is meant for the edit note logic
+
+        
+    }
 
     function revealMenuContent() {
         setRevealContent(true);
@@ -128,7 +134,7 @@ function DottedMenu(props: { noteId: string }) {
 
             {isContentRevealed &&
                 <div className={`absolute right-2 min-w-fit flex flex-col justify-end rounded-lg overflow-hidden ${appUiState.uiMode == "dark" ? "bg-zinc-700" : "bg-zinc-50"} shadow-md`}>
-                    {/* <MenuButton clickHandler={() => { }} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton> */}
+                    <MenuButton clickHandler={editButtonHandler} ><FontAwesomeIcon icon={faPencil} /><span>Edit</span></MenuButton>
                     <MenuButton clickHandler={deleteButtonHandler} ><FontAwesomeIcon icon={faTrashCan} /><span>Delete</span></MenuButton>
                 </div>
             }
