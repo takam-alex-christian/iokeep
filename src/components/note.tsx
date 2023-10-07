@@ -27,8 +27,6 @@ export default function Note(props: NoteProps) {
     const { appUiState } = useContext(appUiContext)
 
     const [dottedMenuVisibility, setDottedMenuVisibility] = useState(false)
-    const [noteEditState, setNoteEditState] = useState(false) //show modal overlay when true
-
     const daysOfTheWeek = [
         "Sunday",
         "Monday",
@@ -72,7 +70,7 @@ export default function Note(props: NoteProps) {
             onMouseLeave={mouseLeaveHandler}
             className={' relative rounded-2xl ' + `${appUiState.uiMode == 'light' ? "bg-zinc-100" : "bg-zinc-800"}`}>
 
-            {dottedMenuVisibility && <DottedMenu noteData={props.noteData} noteEditStateSetter={setNoteEditState} noteId={props.noteData._id} />}
+            {dottedMenuVisibility && <DottedMenu noteData={props.noteData} noteId={props.noteData._id} />}
 
             <div className='flex flex-col p-5 gap-3 justify-between h-full'>{/* Note container*/}
                 <div className='flex flex-col gap-3 overflow-hidden text-ellipsis'>
@@ -86,17 +84,11 @@ export default function Note(props: NoteProps) {
                 </div>
             </div>
 
-            {
-                noteEditState && <ModalOverlay>
-                    <AddNote edit={true} noteData={props.noteData} />
-                </ModalOverlay>
-            }
-
         </article>
     )
 }
 
-function DottedMenu(props: { noteId: string, noteData: NoteDataType ,noteEditStateSetter: React.Dispatch<React.SetStateAction<boolean>> }) {
+function DottedMenu(props: { noteId: string, noteData: NoteDataType  }) {
     const { setNotesData } = useNotes()
 
     const { appUiState, appUiDispatch } = useContext(appUiContext)
