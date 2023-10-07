@@ -27,6 +27,9 @@ export function appDataReducer(prevState: AppDataStateType, action: AppDataActio
         case "switch_current_collection": {
             return { ...prevState, currentCollection: { collectionName: action.payload.collectionName ? action.payload.collectionName : "", _collectionId: action.payload._collectionId ? action.payload._collectionId : "" } }
         }
+        case "switch_current_note": {
+            return {...prevState, currentNote: action.payload}
+        }
         default: {
             throw new Error("invalid action type")
         }
