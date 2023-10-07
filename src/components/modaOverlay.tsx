@@ -7,17 +7,12 @@ import { appUiContext } from "@/libs/contexts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function ModalOverlay(props: { children: React.ReactNode[] | React.ReactNode, externalCloseHandler?: Function }) {
+export default function ModalOverlay(props: { children: React.ReactNode[] | React.ReactNode }) {
 
     const { appUiDispatch } = useContext(appUiContext)
 
     function closeButtonHandler() {
-        //if an external handler is defined, use it
-        if (typeof (props.externalCloseHandler) !== "undefined") {
-            appUiDispatch({ type: "hide_modal" })
-        } else {//else use the default handler
-            props.externalCloseHandler!()
-        }
+        appUiDispatch({ type: "hide_modal" })
     }
 
     return (
