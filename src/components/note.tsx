@@ -88,7 +88,7 @@ export default function Note(props: NoteProps) {
             </div>
 
             {
-                noteEditState && <ModalOverlay>
+                noteEditState && <ModalOverlay externalCloseHandler={()=>{setNoteEditState(false)}}>
                     <AddNote edit={true} noteData={props.noteData} />
                 </ModalOverlay>
             }
