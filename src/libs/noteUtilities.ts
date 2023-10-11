@@ -36,7 +36,7 @@ function backendDeleteRequest(noteId: string): BackendDeleteRequestReturnType {
 
 //edit note function implementation
 //not yet tested
-function updateNoteToBackend(props: Partial<NoteDataType>) {
+async function updateNoteToBackend(props: Partial<NoteDataType>) {
 
     let returnObject: {
         updated: boolean,
@@ -48,7 +48,7 @@ function updateNoteToBackend(props: Partial<NoteDataType>) {
         message: ""
     }
 
-    fetch("/notes", {
+    await fetch("/notes", {
         method: "PATCH",
         body: JSON.stringify(props),
         headers: {

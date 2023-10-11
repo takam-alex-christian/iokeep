@@ -111,7 +111,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
         })
     }
 
-    function submitHandler(e: React.FormEvent) {
+    async function submitHandler(e: React.FormEvent) {
         let notesDataCopy: NoteDataType[] = notesData ? notesData?.notes.slice(0) : []
 
         e.preventDefault();
@@ -120,9 +120,19 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
 
 
             if (isInEdit) {//we implement here what happen when we submit
-                let {updated, message, isError} = updateNoteToBackend(props.noteData!);
+                
+                //we mutate thet state for visual appeal before inititiating anything on the backend
+                // mutate(`/notes?_collectionId=${appDataState.currentCollection._collectionId}`, {...notesData, notes: [...]} )
 
-                if(updated == true && isError == false) console.log(message) //
+                let {updated, message, isError} = await updateNoteToBackend({_id: props.noteData?._id, title: formState.titleValue, body: formState.bodyValue});
+                
+                if(updated == true && isError == false) {
+                    console.log(message)
+                    mutate(`/notes?_collectionId=${appDataState.currentCollection._collectionId}`)
+                    
+                } //
+                
+                appUiDispatch({ type: "hide_modal" })
 
             } else {
 
