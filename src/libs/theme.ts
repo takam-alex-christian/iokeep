@@ -22,7 +22,7 @@ const darkColorClasses = {
     surface: "zinc-800",
     Error: "red-800",
 
-    onPrimary: "neutral-300",
+    onPrimary: "neutral-50", //300
     onSecondary: "",
 
     onBackground: "zinc-500",
