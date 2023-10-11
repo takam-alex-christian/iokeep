@@ -56,7 +56,7 @@ export default function App() {
         <InitAppUiState />
 
 
-        <main className={'min-h-screen flex flex-col gap-8 ' + ` bg-${theme.colors.background}`}>
+        <main className={'min-h-screen flex flex-col gap-8 ' + ` ${theme.colors.background}`}>
           <FloatingPlusButton />
 
           <NavBar />

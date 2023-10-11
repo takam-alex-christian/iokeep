@@ -167,7 +167,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
             {props.edit ?
 
                 //on note edition
-                <div className={`text-lg font-medium p-2 text-${themeData.colors.onSurface} `}>{formState.selectedCollection.collectionName}</div>
+                <div className={`text-lg font-medium p-2 ${themeData.colors.onSurface} `}>{formState.selectedCollection.collectionName}</div>
                 :
                 // on note creation
                 <div className="text-base  text-neutral-400"> {/* collection selector*/}

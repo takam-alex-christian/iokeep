@@ -147,7 +147,7 @@ function SignUpForm() {
                                 size={8}
                             />}
                             {
-                                formState.isLoading == false && <span>Sign In</span>
+                                formState.isLoading == false && <span>Sign Up</span>
                             }
 
                         </PrimaryButton>
