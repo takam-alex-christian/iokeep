@@ -1,7 +1,7 @@
 
 
 const lightColorClasses = {
-    primary: "emerald-500",
+    primary: "green-500",
     secondary: "",
     background: "zinc-200",
     surface: "zinc-100",
@@ -16,7 +16,7 @@ const lightColorClasses = {
 }
 
 const darkColorClasses = {
-    primary: "emerald-800",
+    primary: "green-800",
     secondary: "",
     background: "zinc-900",
     surface: "zinc-800",

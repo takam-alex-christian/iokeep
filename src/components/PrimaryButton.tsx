@@ -19,7 +19,7 @@ export default function PrimaryButton(props: {
   const themeData = {colors: appUiState.uiMode == "dark" ? theme.colors.dark : theme.colors.light}
 
   return (
-    <button type={"submit"} className={`w-full h-14 py-4 overflow-hidden px-8 rounded-2xl bg-${themeData.colors.primary} text-${themeData.colors.onPrimary}`}>
+    <button type={"submit"} className={`w-full h-14 py-4 overflow-hidden px-8 rounded-2xl  bg-${themeData.colors.primary} text-${themeData.colors.onPrimary}`}>
         {props.label}
         {props.children}
     </button>
