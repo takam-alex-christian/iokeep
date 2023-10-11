@@ -1,13 +1,13 @@
 
 "use client"
 
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useReducer, useRef, useEffect, useContext } from "react";
 import { appDataContext, appUiContext } from "@/libs/contexts";
 
 import { mutate } from "swr"
 
 import { ArrowDown2 as ArrowDownIcon } from "iconsax-react";
-import { NoteDataType } from "@/libs/Types";
+import { CollectionDataType, NoteDataType } from "@/libs/Types";
 import { useCollections, useNotes } from "@/libs/getDataFromBackend";
 import { postNoteToBackend } from "@/libs/postDataToBackend";
 import ErrorComponent from "@/components/ErrorComponent";
@@ -15,6 +15,72 @@ import ErrorComponent from "@/components/ErrorComponent";
 import theme from "@/libs/theme";
 import PrimaryButton from "@/components/PrimaryButton";
 import { updateNoteToBackend } from "@/libs/noteUtilities";
+
+
+type FormStateType = {
+    title: string,
+    body: string,
+
+    selectedCollection: {
+        collectionName: string,
+        _collectionId: string,
+    },
+
+    isLoading: boolean,
+
+    showCollectionSelectOptions: boolean
+}
+
+type FormStateReducerActionType = { type: "init_form", payload: FormStateType }
+    | { type: "update_title", payload: { value: string } }
+    | { type: "update_body", payload: { value: string } }
+
+    | { type: "start_loading" }
+    | { type: "stop_loading" }
+
+    | { type: "select_collection", payload: CollectionDataType }
+
+    | { type: "show_collection_select" }
+    | { type: "hide_collection_select" }
+
+
+
+function formStateReducer(prevState: FormStateType, action: FormStateReducerActionType): FormStateType {
+    switch (action.type) {
+        case "init_form": {
+            return { ...action.payload }
+        }
+        case "update_title": {
+            return { ...prevState, title: action.payload.value }
+        }
+        case "update_body": {
+            return { ...prevState, body: action.payload.value }
+        }
+
+        case "start_loading": {
+            return { ...prevState, isLoading: true }
+        }
+        case "stop_loading": {
+            return { ...prevState, isLoading: false }
+        }
+
+        case "select_collection": {
+            return { ...prevState, selectedCollection: { _collectionId: action.payload._collectionId, collectionName: action.payload.collectionName } }
+        }
+
+        case "show_collection_select": {
+            return { ...prevState, showCollectionSelectOptions: true }
+        }
+
+        case "hide_collection_select": {
+            return { ...prevState, showCollectionSelectOptions: false }
+        }
+
+        default: return prevState
+
+    }
+}
+
 
 export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType }) {
 
@@ -35,18 +101,18 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
     const bodyRef = useRef<HTMLTextAreaElement>(null);
 
 
-
     //and we assign note data to state data if it is provided anyways
+    const [formState, formStateDispatch] = useReducer<React.Reducer<FormStateType, FormStateReducerActionType>>(formStateReducer, {
+        title: isInEdit ? props.noteData?.title! : "",
+        body: isInEdit ? props.noteData?.body! : "",
 
-    const [formState, setFormState] = useState({
-        titleValue: isInEdit ? props.noteData?.title! : "",
-        bodyValue: isInEdit ? props.noteData?.body! : "",
-
-        focusWithin: false,
         selectedCollection: {
             collectionName: appDataState.currentCollection.collectionName,
             _collectionId: appDataState.currentCollection._collectionId,
         },
+
+        isLoading: false,
+
         showCollectionSelectOptions: false
     })
 
@@ -74,7 +140,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
         let isFormDataValid: boolean = true;
         const errorsIfAny: string[] = [];
 
-        if (formState.bodyValue.length + formState.titleValue.length == 0) {
+        if (formState.body.length + formState.title.length == 0) {
             isFormDataValid = false;
             errorsIfAny.push("Your note cannot be empty")
         }
@@ -88,30 +154,22 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
         })
     }
 
-    function formFocusWithinHandler() {
-        setFormState((prev) => {
-            return { ...prev, focusWithin: true }
-        })
-    }
-
     function titleChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         setShowError();
 
-        setFormState((prev) => {
-            return { ...prev, titleValue: e.target.value }
-        })
+        formStateDispatch({ type: "update_title", payload: { value: e.target.value } })
     }
 
     function bodyChangeHandler(e: React.ChangeEvent<HTMLTextAreaElement>) {
-        //we recognize tht the form has been touched
         setShowError();
 
-        setFormState((prev) => {
-            return { ...prev, bodyValue: e.target.value }
-        })
+        formStateDispatch({type: "update_body", payload: {value: e.target.value}})
     }
 
     async function submitHandler(e: React.FormEvent) {
+        //first start loading
+        formStateDispatch({ type: "start_loading" })
+
         let notesDataCopy: NoteDataType[] = notesData ? notesData?.notes.slice(0) : []
 
         e.preventDefault();
@@ -120,27 +178,33 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
 
 
             if (isInEdit) {//we implement here what happen when we submit
-                
+
                 //we mutate thet state for visual appeal before inititiating anything on the backend
                 // mutate(`/notes?_collectionId=${appDataState.currentCollection._collectionId}`, {...notesData, notes: [...]} )
 
-                let {updated, message, isError} = await updateNoteToBackend({_id: props.noteData?._id, title: formState.titleValue, body: formState.bodyValue});
-                
-                if(updated == true && isError == false) {
+                let { updated, message, isError } = await updateNoteToBackend({ _id: props.noteData?._id, title: formState.title, body: formState.body });
+
+                if (updated == true && isError == false) {
                     console.log(message)
+
                     mutate(`/notes?_collectionId=${appDataState.currentCollection._collectionId}`)
-                    
+
+                    formStateDispatch({ type: "stop_loading" })
+
                 } //
-                
+
                 appUiDispatch({ type: "hide_modal" })
 
             } else {
 
                 //just for the visual of having something happening right after addition
-                mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`, { ...notesData, notes: [...notesDataCopy, { _id: "", body: formState.bodyValue, title: formState.titleValue, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId, creationDate: "", lastModified: "" } as NoteDataType] })
+                mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`, { ...notesData, notes: [...notesDataCopy, { _id: "", body: formState.body, title: formState.title, tags: [], _ownerCollectionId: formState.selectedCollection._collectionId, creationDate: "", lastModified: "" } as NoteDataType] })
 
-                postNoteToBackend({ _id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.titleValue, body: formState.bodyValue, tags: [], creationDate: "", lastModified: "" }).then((response) => {
+                await postNoteToBackend({ _id: "", _ownerCollectionId: formState.selectedCollection._collectionId, title: formState.title, body: formState.body, tags: [], creationDate: "", lastModified: "" }).then((response) => {
                     console.log(response)
+
+                    formStateDispatch({ type: "stop_loading" })
+
                 }).then(() => {
                     mutate(`/notes?_collectionId=${formState.selectedCollection._collectionId}`)
                 })
@@ -150,23 +214,21 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
             }
         }
 
+
+
     }
 
     //
     function collectionSelectButtonHandler({ collectionName, _collectionId }: { collectionName: string, _collectionId: string }) { //the function called each time a collection select option is clicked on
-        setFormState((prevState) => {
-            return { ...prevState, selectedCollection: { collectionName: collectionName, _collectionId: _collectionId } }
-        })
+
+        formStateDispatch({ type: "select_collection", payload: { collectionName: collectionName, _collectionId: _collectionId } })
 
         toggleCollectionSelectOptionsHandler();
     }
 
     function toggleCollectionSelectOptionsHandler() { //toggle view
-
-        setFormState((prevState) => {
-            return { ...prevState, showCollectionSelectOptions: prevState.showCollectionSelectOptions ? false : true }
-        })
-
+        if (formState.showCollectionSelectOptions == true) formStateDispatch({ type: "show_collection_select" })
+        else formStateDispatch({ type: "hide_collection_select" })
     }
 
     if (isCollectionsDataLoading || isNotesLoading) return (<div>loading ...</div>)
@@ -203,7 +265,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
                 </div>
             }
 
-            <form ref={formRef} action="" onSubmit={submitHandler} onFocus={formFocusWithinHandler}>
+            <form ref={formRef} action="" onSubmit={submitHandler}>
 
                 <div className="flex flex-col gap-4">
                     <div className={"flex flex-col gap-2 rounded-2xl p-2 outline outline-1  " + `${appUiState.uiMode == "light" ? "outline-zinc-300 focus-within:shadow-md " : "outline-zinc-700 focus-within:shadow-2xl "}`}>
@@ -212,7 +274,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
                             maxLength={50}
                             type="text"
                             onChange={titleChangeHandler}
-                            value={formState.titleValue}
+                            value={formState.title}
                             placeholder="Take a note"
                             className={"focus:outline-none font-medium text-lg bg-transparent " + `${appUiState.uiMode == "light" ? "text-zinc-900 placeholder:text-zinc-400" : "text-zinc-500 placeholder:text-zinc-700"}`} />
                         <textarea
@@ -220,10 +282,10 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
                             maxLength={200}
                             ref={bodyRef}
                             onChange={bodyChangeHandler}
-                            value={formState.bodyValue}
+                            value={formState.body}
                             spellCheck={false}
                             className={"focus:outline-none font-normal min-h-[8em] resize-none bg-transparent " + `${appUiState.uiMode == "light" ? "text-zinc-700 placeholder:text-zinc-400" : "text-zinc-600 placeholder:text-zinc-700"}`} />
-                        <div className="text-xs font-normal text-neutral-400">{formState.bodyValue.length + formState.titleValue.length} Characters</div>
+                        <div className="text-xs font-normal text-neutral-400">{formState.body.length + formState.title.length} Characters</div>
                     </div>
 
                     {
@@ -236,7 +298,7 @@ export default function AddNote(props: { edit?: boolean, noteData?: NoteDataType
 
                     <div>
                         {/* <button className="w-full bg-green-600 text-neutral-100 py-4 px-8 rounded-2xl disabled:bg-neutral-500">Add</button> */}
-                        <PrimaryButton>{isInEdit ? "Save Changes" : "Add"}</PrimaryButton>
+                        <PrimaryButton isLoading={formState.isLoading}>{isInEdit ? "Save Changes" : "Add"}</PrimaryButton>
                     </div>
                 </div>
             </form>
