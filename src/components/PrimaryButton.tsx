@@ -1,4 +1,4 @@
-
+"use client"
 
 import React from 'react'
 
@@ -17,6 +17,8 @@ export default function PrimaryButton(props: {
   const {appUiState} = useContext(appUiContext)
 
   const themeData = {colors: appUiState.uiMode == "dark" ? theme.colors.dark : theme.colors.light}
+
+  console.log(themeData)
 
   return (
     <button type={"submit"} className={`w-full h-14 py-4 overflow-hidden px-8 rounded-2xl bg-${themeData.colors.primary} text-${themeData.colors.onPrimary}`}>
