@@ -10,6 +10,15 @@ const appDataContext = createContext<{
     appDataDispatch: Dispatch<AppDataActionType>
 }>({
     appDataState: {
+        currentNote: {
+             _id: "",
+             body: "",
+             creationDate: "",
+             lastModified: "",
+             tags: [],
+             title: "",
+             _ownerCollectionId: ""
+        },
         currentCollection: {
             collectionName: "",
             _collectionId: ""
