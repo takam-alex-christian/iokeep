@@ -112,12 +112,12 @@ function SignUpForm() {
 
                         }
 
-                    }).catch((err)=>{
+                    }).catch((err) => {
                         formDispatch({ type: "stop_loading" });
-                        formDispatch({type: "update_error", payload: {value: err}})
+                        formDispatch({ type: "update_error", payload: { value: err } })
                     })
 
-                }else formDispatch({type: "update_error", payload: {value: "Both password must be the same!"}})
+                } else formDispatch({ type: "update_error", payload: { value: "Both password must be the same!" } })
 
             } else formDispatch({ type: "update_error", payload: { value: "Password can not be empty!" } })
         } else formDispatch({ type: "update_error", payload: { value: "Username should not be empty!" } })
@@ -141,15 +141,8 @@ function SignUpForm() {
                             </div>
                         </Col>
 
-                        <PrimaryButton>
-                            {formState.isLoading && <BeatLoader cssOverride={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                                color="#ffffffa0"
-                                size={8}
-                            />}
-                            {
-                                formState.isLoading == false && <span>Sign Up</span>
-                            }
-
+                        <PrimaryButton isLoading={formState.isLoading}>
+                            <span>Sign Up</span>
                         </PrimaryButton>
 
                         <div className="flex flex-row gap-4 items-center justify-center text-center">

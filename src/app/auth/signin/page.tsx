@@ -98,15 +98,15 @@ function SignInForm() {
                 //on response, update the formstate
 
                 await signIn({ username: formState.usernameValue, password: formState.passwordValue }).then((jsonResponse) => {
-                    
+
 
                     //if we succeed we redirect to app
                     if (jsonResponse.succeeded == true) {
 
                         console.log("authed")
 
-                        formDispatch({type: "stop_loading"});
-                        
+                        formDispatch({ type: "stop_loading" });
+
                         router.push("/app");
 
                     }
@@ -135,15 +135,12 @@ function SignInForm() {
                             </div>
                         </Col>
 
-                        <PrimaryButton>
-                            {formState.isLoading && <BeatLoader cssOverride={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                        <PrimaryButton isLoading={formState.isLoading}>
+                            {/* {formState.isLoading && <BeatLoader cssOverride={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                                 color="#ffffffa0"
                                 size={8}
-                            />}
-                            {
-                                formState.isLoading == false && <span>Sign In</span>
-                            }
-
+                            />} */}
+                            <span>Sign In</span>
                         </PrimaryButton>
 
                         <div className="flex flex-row gap-4 items-center justify-center text-center">
