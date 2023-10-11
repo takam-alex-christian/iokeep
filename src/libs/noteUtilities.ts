@@ -56,6 +56,7 @@ function updateNoteToBackend(props: Partial<NoteDataType>) {
         }
     }).then((res => res.json()), (err) => { console.log(err) }).then((jsonResponse: { success: boolean, message: "string", isError: boolean }) => {
         returnObject = { updated: jsonResponse.success, isError: jsonResponse.isError, message: jsonResponse.message }
+        console.log(returnObject)
     })
 
     return returnObject
