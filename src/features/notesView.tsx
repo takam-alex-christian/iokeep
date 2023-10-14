@@ -10,6 +10,23 @@ import { NoteDataType } from '@/libs/Types'
 import { useCollections, useNotes } from '@/libs/getDataFromBackend'
 import Heading from '@/components/Heading'
 import BlockLoadingPlaceholder from '@/components/BlockLoadingPlaceholder'
+import Col from '@/layouts/Col'
+
+import { daysOfTheWeek, monthsOfTheYear } from '@/data/dates'
+
+
+type DateObject = {
+  day: number, //0 - 6
+  date: number, //1-31
+  month: number, //0-11
+  year: number, //any four digits number 
+}
+
+type NotesGroupedByDate = {
+  date: DateObject,
+  notes: NoteDataType[]
+}
+
 
 export default function NotesView() {
 
@@ -129,32 +146,75 @@ function NoteLister() {
     console.log(appDataState.currentCollection);
   })
 
-  if (isNotesLoading) return (<BlockLoadingPlaceholder />)
-  else return (
-    <>
-      {notesData && notesData?.notes.length > 0 && <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2'>
-        {notesData?.notes.map((eachNote, index) => {
-          return (<Note key={index} noteData={eachNote} />)
-        })}
-      </div>}
 
-      {
-        notesData?.notes.length == 0 && <CreateANoteViewIfEmpty />
+
+
+  if (isNotesLoading) return (<BlockLoadingPlaceholder />)
+  else {
+
+    const groupedNotesData: NotesGroupedByDate[] = []
+
+    notesData?.notes.forEach((eachNote) => {
+
+      let lastModifiedDate = new Date(eachNote.lastModified);
+      let lastModifiedDateObject = { day: lastModifiedDate.getDay(), date: lastModifiedDate.getDate(), month: lastModifiedDate.getMonth(), year: lastModifiedDate.getFullYear() }
+
+      if (groupedNotesData.length == 0) { //first iteration, no groups expected
+        groupedNotesData.push({ date: lastModifiedDateObject, notes: [eachNote] })
+      } else if (groupedNotesData.length > 0) {
+        //
+        let prevGroupDateObject = groupedNotesData.slice(-1)[0].date
+
+        if (prevGroupDateObject.date == lastModifiedDateObject.date && prevGroupDateObject.month == lastModifiedDateObject.month && prevGroupDateObject.year == lastModifiedDateObject.year) {
+          //this note and the previous have the same date object
+
+          //then we add this new note to the last group
+          groupedNotesData[groupedNotesData.length - 1].notes.push(eachNote)
+
+        } else {
+          // we create a new group for this note since it has a different date object
+          groupedNotesData.push({ date: lastModifiedDateObject, notes: [eachNote] })
+        }
+
       }
-    </>
-  )
+    })
+
+    console.log(groupedNotesData)
+
+    return (
+      <>
+        {/* {notesData && notesData?.notes.length > 0 && <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2'>
+          {notesData?.notes.map((eachNote, index) => {
+            return (<Note key={index} noteData={eachNote} />)
+          })}
+        </div>} */}
+
+        {
+          <Col gap={2}>
+            {groupedNotesData.map((eachGroup, index) => {
+              return (<NotesGrid key={index} groupData={eachGroup} />)
+            })}
+          </Col>
+        }
+
+        {
+          notesData?.notes.length == 0 && <CreateANoteViewIfEmpty />
+        }
+      </>
+    )
+  }
 }
 
-function CurrentCollectionName() {
 
-  const { collectionsData, isLoading: isCollectionsDataLoading } = useCollections()
-
-  const { appUiState } = useContext(appUiContext)
-  const { appDataState } = useContext(appDataContext)
-
-  if (isCollectionsDataLoading) return (<BlockLoadingPlaceholder />)
-  else return (
-    <h2 className={'text-3xl font-normal p-4 ' + `${appUiState.uiMode == "light" ? "text-zinc-800" : "text-zinc-500"}`}>{appDataState.currentCollection.collectionName}</h2>
+function NotesGrid(props: {groupData: NotesGroupedByDate}) {
+  return (
+    <Col gap={1}>
+      <Heading label={`${daysOfTheWeek[props.groupData.date.day]} ${monthsOfTheYear[props.groupData.date.month]} ${props.groupData.date.date} ${props.groupData.date.year}`} />
+      <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2'>
+        {props.groupData.notes.map((eachNote) => {
+          return (<Note key={eachNote._id} noteData={eachNote} />)
+        })}
+      </div>
+    </Col>
   )
-
 }

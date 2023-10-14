@@ -45,7 +45,7 @@ export default function CollectionNav() {
 
             <div className="flex flex-col gap-4 ">
 
-                <h3 className={"p-4 text-lg font-bold " + `${appUiState.uiMode == "light" ? "text-zinc-800" : "text-zinc-500"}`}>COLLECTIONS </h3>
+                {/* <h3 className={"p-4 text-lg font-bold " + `${appUiState.uiMode == "light" ? "text-zinc-800" : "text-zinc-500"}`}>COLLECTIONS </h3> */}
 
                 {
                     collectionsData?.collections.length == 0 &&
