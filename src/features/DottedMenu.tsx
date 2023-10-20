@@ -5,10 +5,12 @@ import React, {useState, useReducer, useContext} from "react";
 import { FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import type {Icon as FaIconType} from "@fortawesome/fontawesome-svg-core"
+
+import Col from "@/layouts/Col";
 // lives in a div
 // this div has a button and a display box for a button list
 
-type MenuOption = {
+type DottedMenuOption = {
     label: string,
     icon: FaIconType,
     clickHandler: React.MouseEventHandler<HTMLButtonElement>
@@ -16,7 +18,7 @@ type MenuOption = {
 
 type DottedMenuProps = {
 
-    options: MenuOption[]
+    options: DottedMenuOption[]
 }
 
 type DottedMenuStateType = {
@@ -37,15 +39,31 @@ function DottedMenu(props: DottedMenuProps) {
 
     const [dottedMenuState, dottedMenuDispatch]= useReducer(dottedMenuReducer, {showOptions: false});
 
+    function dottedIconClickHandler(){
+        // will soon see an implementation
+    }
+
 
     return (
         <div>
             <div>
-                <button><FontAwesomeIcon icon={faEllipsis} /></button>
+                <button onClick={dottedIconClickHandler}><FontAwesomeIcon icon={faEllipsis} /></button>
             </div>
             <div>
-                {}
+                {dottedMenuState.showOptions && <DottedMenuOptionList options= {} />}
             </div>
         </div>
     )
+}
+
+function DottedMenuOptionList(props: {options: DottedMenuOption}){
+
+    return (
+        <Col >
+        </Col>
+    )
+}
+
+function DottedMenuOption(){
+
 }
