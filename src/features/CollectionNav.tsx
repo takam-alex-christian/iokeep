@@ -10,6 +10,13 @@ import { useCollections, useUser } from "@/libs/getDataFromBackend"
 import type { CollectionDataType } from "@/libs/Types"
 import BlockLoadingPlaceholder from "@/components/BlockLoadingPlaceholder"
 import Col from "@/layouts/Col"
+import Row from "@/layouts/Row"
+import DottedMenu, { DottedMenuOption } from "./DottedMenu"
+
+//ic
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
+import { faPencil } from "@fortawesome/free-solid-svg-icons"
 
 
 export default function CollectionNav() {
@@ -127,11 +134,42 @@ function CollectionButton(props: {
     const { appUiState } = useContext(appUiContext)
     const { appDataState } = useContext(appDataContext)
 
+    const thisDottedMenuOptions: DottedMenuOption[] = [
+        {
+            icon: <FontAwesomeIcon icon={faPencil} />,
+            label: "Edit",
+            clickHandler: (e: React.MouseEvent) => {
+                //what should happen to this collection once this button is clicked
+                console.log(e)
+            }
+        },
+        {
+            icon: <FontAwesomeIcon icon={faTrashCan} />,
+            label: "Delete",
+            clickHandler: (e: React.MouseEvent) => {
+                console.log(e)
+            }
+        }
+    ]
+
     return (
-        <button onClick={props.onClick} className={`flex flex-row justify-start items-center rounded-2xl py-3 px-4 gap-4 ${appUiState.uiMode == "dark" ? "hover:bg-zinc-800" : "hover:bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
-            {/* <NoteIcon size="24" color="#000"/> */}
-            <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
-            <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
-        </button>
+        <Row className={`relative justify-between rounded-2xl ${appUiState.uiMode == "dark" ? "hover:bg-zinc-800" : "hover:bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
+            <button onClick={props.onClick} className={`flex w-full py-3 pr-12 justify-start items-center `}>
+                {/* <NoteIcon size="24" color="#000"/> */}
+                    <Row gap={2} className="pl-4 ">
+                        <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
+                        <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
+
+                    </Row>
+
+            </button>
+
+            <DottedMenu
+                options={thisDottedMenuOptions}
+                className="absolute right-4 top-3"
+            />
+        </Row>
+
+
     )
 }
