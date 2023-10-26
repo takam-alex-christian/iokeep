@@ -37,7 +37,7 @@ export type AppDataActionType = { type: "create_collection", payload: { collecti
 export type AppUiStateType = {
     uiMode: "light" | "dark",
     modalOverlay?: boolean,
-    currentModalView?: "create_collection" | "add_note" | "edit_note" | null
+    currentModalView?: "create_collection" | "edit_collection" | "add_note" | "edit_note" | null
 }
 
 export type AppUiActionType =
@@ -45,7 +45,7 @@ export type AppUiActionType =
     | { type: "switched_ui_mode" }
     | {
         type: "show_modal", payload: {
-            view: "create_collection" | "add_note" | "edit_note"
+            view: "create_collection" | "edit_collection" | "add_note" | "edit_note" 
         }
     }
     | { type: "hide_modal" }
