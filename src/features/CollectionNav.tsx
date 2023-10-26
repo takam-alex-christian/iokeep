@@ -17,6 +17,7 @@ import DottedMenu, { DottedMenuOption } from "./DottedMenu"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
+import { findCollectionByIdAndDelete } from "@/libs/collectionUtilities"
 
 
 export default function CollectionNav() {
@@ -126,13 +127,13 @@ function CollectionList(props: {}) {
 }
 
 function CollectionButton(props: {
-    label?: string,
-    _collectionId?: string
-    onClick?: () => void
+    label: string,
+    _collectionId: string
+    onClick: () => void
 }) {
 
-    const { appUiState } = useContext(appUiContext)
-    const { appDataState } = useContext(appDataContext)
+    const { appUiState, appUiDispatch } = useContext(appUiContext)
+    const { appDataState, appDataDispatch} = useContext(appDataContext)
 
     const thisDottedMenuOptions: DottedMenuOption[] = [
         {
@@ -140,14 +141,21 @@ function CollectionButton(props: {
             label: "Edit",
             clickHandler: (e: React.MouseEvent) => {
                 //what should happen to this collection once this button is clicked
-                console.log(e)
+                appDataDispatch({type: "switch_target_collection", payload: {_collectionId: props._collectionId}});
+                appUiDispatch({type: "show_modal", payload: {view: "edit_collection"}});
             }
         },
         {
             icon: <FontAwesomeIcon icon={faTrashCan} />,
             label: "Delete",
-            clickHandler: (e: React.MouseEvent) => {
-                console.log(e)
+            clickHandler: async (e: React.MouseEvent) => {
+                let {success} = (await findCollectionByIdAndDelete(props._collectionId))
+
+                if(success){
+                    console.log("deleted successfully")
+
+                    //mutate collection list
+                }
             }
         }
     ]
