@@ -2,6 +2,8 @@
 //react imports
 import React, { useState, useReducer, useContext } from "react";
 
+import { appUiContext } from "@/libs/contexts";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
@@ -41,6 +43,8 @@ function DottedMenu(props: DottedMenuProps) {
 
     const [dottedMenuState, dottedMenuDispatch] = useReducer(dottedMenuReducer, { showOptions: false });
 
+    const { appUiState } = useContext(appUiContext)
+
     function dottedIconClickHandler() {
         // will soon see an implementation
         dottedMenuDispatch({ type: "toggle_options" });
@@ -50,14 +54,17 @@ function DottedMenu(props: DottedMenuProps) {
 
 
     return (
-        <div className={` ${props.className} z-50`}>
+        <div className={` group ${props.className} ` + `${appUiState.uiMode == "light" ? "text-stone-600" : "text-zinc-500"}`}>
             <Col gap={0} className="">
                 <Row className="justify-end">
                     <button onClick={dottedIconClickHandler}><FontAwesomeIcon icon={faEllipsis} /></button>
                 </Row>
-                <div className={""}>
-                    {dottedMenuState.showOptions && <DottedMenuOptionList options={props.options} />}
+                <div className="relative">
+                    <div className={`absolute z-10 right-0 min-w-fit flex flex-col justify-end rounded-lg overflow-hidden ${appUiState.uiMode == "dark" ? "bg-zinc-700" : "bg-zinc-50"} shadow-md`}>
+                        {dottedMenuState.showOptions && <DottedMenuOptionList options={props.options} />}
+                    </div>
                 </div>
+
             </Col>
         </div>
     )
@@ -68,8 +75,9 @@ function DottedMenuOptionList(props: { options: DottedMenuOption[] }) {
 
     //some list specific here
 
+
     return (
-        <ul>
+        <ul className={""}>
             {/* options is a list */}
             <Col gap={0}>
                 {props.options.map((eachDottedMenuOption, index) => {
@@ -83,8 +91,18 @@ function DottedMenuOptionList(props: { options: DottedMenuOption[] }) {
 //each meanu option
 function DottedMenuOption(props: { dottedMenuOptionData: DottedMenuOption }) {
     //some option specific operations here
+    const { appUiState } = useContext(appUiContext)
     return (
-        <li><Row className="justify-start"><button onClick={props.dottedMenuOptionData.clickHandler}><Row gap={3} className="items-center">{props.dottedMenuOptionData.icon}{props.dottedMenuOptionData.label}</Row></button></Row></li>
+        <li>
+            <Row className={`justify-start `}>
+                <button
+                    onClick={props.dottedMenuOptionData.clickHandler}
+                    className={`w-full py-2 px-2 ` + `${appUiState.uiMode == "dark" ? "hover:bg-zinc-600" : "hover:bg-zinc-200"}`} >
+
+                    <Row gap={3} className={`items-center `}>{props.dottedMenuOptionData.icon}{props.dottedMenuOptionData.label}</Row>
+                </button>
+            </Row>
+        </li>
     )
 }
 
