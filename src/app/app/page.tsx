@@ -44,7 +44,7 @@ export default function App() {
 
   const [appUiState, appUiDispatch] = useReducer<React.Reducer<AppUiStateType, AppUiActionType>>(appUiReducer, { uiMode: "dark", modalOverlay: false });
 
-  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { currentCollection: { collectionName: "", _collectionId: "" }, currentNote: {} as NoteDataType});
+  const [appDataState, appDataDispatch] = useReducer<React.Reducer<AppDataStateType, AppDataActionType>>(appDataReducer, { currentCollection: { collectionName: "", _collectionId: "" }, targetCollectionId: "" ,currentNote: {} as NoteDataType});
 
   const theme = {colors: appUiState.uiMode == "dark"? themeData.colors.dark : themeData.colors.light }
 
@@ -71,7 +71,8 @@ export default function App() {
 
           {appUiState.modalOverlay &&
             <ModalOverlay>
-              {appUiState.currentModalView == "create_collection" && <CreateCollection />}
+              {appUiState.currentModalView == "create_collection" && <CreateCollection edit={false} />}
+              {appUiState.currentModalView == "edit_collection" && <CreateCollection edit={true} />}
               {appUiState.currentModalView == "add_note" && <AddNote />}
 
               {/* look for a way to communicate the note here */}

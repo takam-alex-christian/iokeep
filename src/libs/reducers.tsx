@@ -30,6 +30,9 @@ export function appDataReducer(prevState: AppDataStateType, action: AppDataActio
         case "switch_current_note": {
             return {...prevState, currentNote: action.payload}
         }
+        case "switch_target_collection": {
+            return {...prevState, targetCollectionId: action.payload._collectionId}
+        }
         default: {
             throw new Error("invalid action type")
         }

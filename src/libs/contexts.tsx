@@ -19,6 +19,7 @@ const appDataContext = createContext<{
              title: "",
              _ownerCollectionId: ""
         },
+        targetCollectionId: "",
         currentCollection: {
             collectionName: "",
             _collectionId: ""

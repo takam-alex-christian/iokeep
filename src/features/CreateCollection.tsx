@@ -13,6 +13,7 @@ import { postCollectionToBackend } from "@/libs/postDataToBackend";
 import ErrorComponent from "@/components/ErrorComponent";
 import Col from "@/layouts/Col";
 import PrimaryButton from "@/components/PrimaryButton";
+import { findCollectionByIdAndUpdate } from "@/libs/collectionUtilities";
 
 type MessageType = "success" | "warning" | "error" | null
 
@@ -33,27 +34,34 @@ type CollectionFormReducerActionType = { type: "update_collectionName", payload:
 
     | { type: "update_message", payload: { value: string, type: MessageType } }
 
-export default function CreateCollection() {
+export default function CreateCollection(props: { edit: boolean }) {
+    const { appDataDispatch, appDataState } = useContext(appDataContext)
+    const { appUiDispatch, appUiState } = useContext(appUiContext)
+
+    const { collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData } = useCollections()
 
     const [collectionState, collectionDispatch] = useReducer((prevState: CollectionFormStateType, action: CollectionFormReducerActionType) => {
         switch (action.type) {
             case "update_collectionName": return { ...prevState, collectionNameValue: action.payload.value }
-            
+
             case "start_loading": return { ...prevState, isLoading: true }
             case "stop_loading": return { ...prevState, isLoading: false }
-            
+
             case "show_message": return { ...prevState, showMessage: true }
             case "hide_message": return { ...prevState, showMessage: false }
-            
+
             case "update_message": return { ...prevState, message: action.payload.value, messageType: action.payload.type, showMessage: true }
             default: return prevState;
         }
-    }, { collectionNameValue: "", message: "", messageType: null, showMessage: false, isLoading: false } as CollectionFormStateType)
+    }, {
+        collectionNameValue: props.edit ? !isCollectionsDataLoading ? collectionsData?.collections.find((eachCollection: CollectionDataType) => { return eachCollection._collectionId == appDataState.targetCollectionId })?.collectionName : "" : "",
+        message: "",
+        messageType: null,
+        showMessage: false, isLoading: false
+    } as CollectionFormStateType)
 
-    const { collectionsData, isLoading: isCollectionsDataLoading, setCollectionsData } = useCollections()
 
-    const { appDataDispatch, appDataState } = useContext(appDataContext)
-    const { appUiDispatch, appUiState } = useContext(appUiContext)
+
 
     // const [formState, setFormState] = useState<{ collectionNameValue: string, showMessage: boolean, message: string, isError: false }>({ collectionNameValue: "", isError: false, showMessage: false, message: "" })
 
@@ -64,9 +72,9 @@ export default function CreateCollection() {
     }, [])
 
     function formSubmitHandler(e: React.FormEvent) {
-        
+
         //show with a loader that the request is being processed
-        collectionDispatch({type:"start_loading"})
+        collectionDispatch({ type: "start_loading" })
 
         let message: string = ""
         let messageType: MessageType = null
@@ -90,13 +98,26 @@ export default function CreateCollection() {
 
                 setCollectionsData({ ...collectionsData, collections: [...(collectionsData ? collectionsData.collections.slice(0) : []), { collectionName: collectionState.collectionNameValue, _collectionId: "" }] })
 
-                postCollectionToBackend({
-                    collectionName: collectionState.collectionNameValue,
-                    _collectionId: ""
-                }).then((result) => {
-                    console.log(result)
-                    mutate("/collections")
-                })
+                if (props.edit == false) {
+                    postCollectionToBackend({
+                        collectionName: collectionState.collectionNameValue,
+                        _collectionId: ""
+                    }).then((result) => {
+                        console.log(result)
+                        mutate("/collections")
+                    })
+
+                } else if (props.edit == true) {
+                    // findCollectionByIdAndUpdate({})
+                    
+                    
+                    findCollectionByIdAndUpdate({_collectionId: appDataState.targetCollectionId, collectionName: collectionState.collectionNameValue}).then(result=>{
+                        //something can be initiated onSuccess
+                        if(result.success) console.log("updated collection")
+                    })
+                        
+                    
+                }
 
                 appUiDispatch({ type: "hide_modal" });
 
@@ -109,7 +130,7 @@ export default function CreateCollection() {
         }
 
 
-        collectionDispatch({type:"stop_loading"})
+        collectionDispatch({ type: "stop_loading" })
 
     }
 
@@ -117,7 +138,7 @@ export default function CreateCollection() {
 
         e.preventDefault();
 
-        collectionDispatch({type: "update_collectionName", payload: {value: e.target.value}})
+        collectionDispatch({ type: "update_collectionName", payload: { value: e.target.value } })
 
     }
 
@@ -143,7 +164,7 @@ export default function CreateCollection() {
                     </Col>
 
                     <div>
-                        <PrimaryButton>{ collectionState.isLoading? "Loading": "Create Collection"}</PrimaryButton>
+                        <PrimaryButton>{collectionState.isLoading ? "Loading" : props.edit? "Update" : "Create Collection"}</PrimaryButton>
                     </div>
                 </div>
             </form>
