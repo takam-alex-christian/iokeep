@@ -46,7 +46,7 @@ export default function CollectionNav() {
 
 
     return (
-        <div className="flex flex-col justify-between gap-8">
+        <div className="flex flex-col justify-between gap-8 max-w-xs">
             {/* utility collections */}
 
 
@@ -153,12 +153,12 @@ function CollectionButton(props: {
     ]
 
     return (
-        <Row className={`relative justify-between rounded-2xl ${appUiState.uiMode == "dark" ? "hover:bg-zinc-800" : "hover:bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
+        <Row className={`group relative justify-between rounded-2xl ${appUiState.uiMode == "dark" ? "hover:bg-zinc-800" : "hover:bg-zinc-300"} ${appDataState.currentCollection._collectionId == props._collectionId ? `${appUiState.uiMode == "dark" ? "bg-zinc-800" : "bg-zinc-300"}` : ""}`}>
             <button onClick={props.onClick} className={`flex w-full py-3 pr-12 justify-start items-center `}>
                 {/* <NoteIcon size="24" color="#000"/> */}
                     <Row gap={2} className="pl-4 ">
                         <DocumentCopy color={`${appUiState.uiMode == "light" ? "#474E41" : "#959E99"}`} />
-                        <span className={`${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</span>
+                        <p className={`max-w-[220px] whitespace-nowrap text-left text-ellipsis overflow-hidden ${appUiState.uiMode == "light" ? "text-zinc-700" : "text-zinc-500"}`}>{props.label}</p>
 
                     </Row>
 
@@ -166,7 +166,7 @@ function CollectionButton(props: {
 
             <DottedMenu
                 options={thisDottedMenuOptions}
-                className="absolute right-4 top-3"
+                className="invisible group-hover:visible absolute right-4 top-3"
             />
         </Row>
 
