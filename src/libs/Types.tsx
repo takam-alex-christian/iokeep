@@ -25,14 +25,17 @@ export type AppDataStateType = {
     currentCollection: {
         collectionName: string,
         _collectionId: string
-    }
+    },
+    currentNote: NoteDataType,
+    targetCollectionId: string
 
-    currentNote: NoteDataType
+    
 }
 
 export type AppDataActionType = { type: "create_collection", payload: { collectionName: string } }
     | { type: "switch_current_collection", payload: { collectionName?: string, _collectionId?: string } }
     | { type: "switch_current_note", payload: NoteDataType }
+    | { type: "switch_target_collection", payload: {_collectionId: string}}
 
 export type AppUiStateType = {
     uiMode: "light" | "dark",
